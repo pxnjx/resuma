@@ -1,0 +1,139 @@
+/* ═══════════════════════════════════════════════════════════
+   Resume paper + templates (modern / classic / minimal).
+   Ported from ats.html — the truncated template CSS has been
+   completed. This file is also imported with ?raw by the
+   PDF/DOCX exporters so exports match the on-screen preview.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── BASE PAPER ── */
+.resume-paper {
+  background: #ffffff;
+  color: #1a1a1a;
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 44px;
+  font-size: 10pt;
+  line-height: 1.5;
+  min-height: 600px;
+}
+.resume-paper h1 { margin: 0; }
+.resume-paper .resume-empty {
+  color: #9ca3af;
+  font-size: 10pt;
+  text-align: center;
+  margin-top: 40px;
+}
+.resume-paper .skill-group { margin-bottom: 4px; }
+.resume-paper .skill-group strong { font-weight: 700; }
+.resume-paper .skill-group .skill-tag,
+.resume-paper .skills-grouped .skill-tag { margin: 1px 4px 1px 0; display: inline-block; }
+
+/* ── TEMPLATE: MODERN ── */
+.resume-paper.tpl-modern .resume-name { font-size: 22pt; font-weight: 800; color: #1a1a1a; letter-spacing: -0.5px; margin-bottom: 2px; }
+.resume-paper.tpl-modern .resume-tagline { font-size: 10pt; color: #6b7280; margin-bottom: 14px; }
+.resume-paper.tpl-modern .resume-section { margin-bottom: 16px; }
+.resume-paper.tpl-modern .resume-section-title {
+  font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+  color: #7c5cfc; border-bottom: 1.5px solid #7c5cfc; padding-bottom: 3px; margin-bottom: 8px;
+}
+.resume-paper.tpl-modern .resume-entry { margin-bottom: 10px; }
+.resume-paper.tpl-modern .entry-header { display: flex; justify-content: space-between; align-items: baseline; }
+.resume-paper.tpl-modern .entry-title { font-size: 10.5pt; font-weight: 700; color: #1a1a1a; }
+.resume-paper.tpl-modern .entry-company { font-size: 10pt; color: #4b5563; }
+.resume-paper.tpl-modern .entry-date { font-size: 9pt; color: #6b7280; white-space: nowrap; }
+.resume-paper.tpl-modern .entry-desc { font-size: 9.5pt; color: #374151; margin-top: 3px; white-space: pre-line; }
+.resume-paper.tpl-modern .skills-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.resume-paper.tpl-modern .skill-tag {
+  font-size: 8.5pt; background: #f3f0ff; color: #7c5cfc; padding: 2px 8px;
+  border-radius: 3px; font-weight: 600;
+}
+.resume-paper.tpl-modern .contact-row {
+  display: flex; flex-wrap: wrap; gap: 12px; font-size: 9pt; color: #4b5563; margin-bottom: 14px;
+}
+.resume-paper.tpl-modern .contact-item { display: flex; align-items: center; gap: 4px; }
+
+/* ── TEMPLATE: CLASSIC ── */
+.resume-paper.tpl-classic .resume-name { font-size: 20pt; font-weight: 700; color: #1a1a1a; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.resume-paper.tpl-classic .resume-tagline { font-size: 9.5pt; color: #6b7280; text-align: center; margin-bottom: 12px; }
+.resume-paper.tpl-classic .resume-section { margin-bottom: 14px; }
+.resume-paper.tpl-classic .resume-section-title {
+  font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
+  color: #1a1a1a; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-bottom: 8px;
+}
+.resume-paper.tpl-classic .resume-entry { margin-bottom: 8px; }
+.resume-paper.tpl-classic .entry-header { display: flex; justify-content: space-between; align-items: baseline; }
+.resume-paper.tpl-classic .entry-title { font-size: 10.5pt; font-weight: 700; color: #1a1a1a; }
+.resume-paper.tpl-classic .entry-company { font-size: 9.5pt; color: #4b5563; font-style: italic; }
+.resume-paper.tpl-classic .entry-date { font-size: 9pt; color: #6b7280; white-space: nowrap; }
+.resume-paper.tpl-classic .entry-desc { font-size: 9.5pt; color: #374151; margin-top: 2px; white-space: pre-line; }
+.resume-paper.tpl-classic .skills-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.resume-paper.tpl-classic .skill-tag { font-size: 8.5pt; border: 1px solid #d1d5db; color: #374151; padding: 1px 7px; border-radius: 2px; }
+.resume-paper.tpl-classic .contact-row {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; font-size: 9pt; color: #4b5563; margin-bottom: 14px;
+}
+
+/* ── TEMPLATE: MINIMAL ── */
+.resume-paper.tpl-minimal .resume-name { font-size: 24pt; font-weight: 300; color: #1a1a1a; letter-spacing: -1px; margin-bottom: 1px; }
+.resume-paper.tpl-minimal .resume-tagline { font-size: 10pt; color: #9ca3af; margin-bottom: 16px; }
+.resume-paper.tpl-minimal .resume-section { margin-bottom: 14px; }
+.resume-paper.tpl-minimal .resume-section-title {
+  font-size: 7.5pt; font-weight: 600; text-transform: uppercase; letter-spacing: 3px;
+  color: #9ca3af; margin-bottom: 6px;
+}
+.resume-paper.tpl-minimal .resume-entry { margin-bottom: 8px; }
+.resume-paper.tpl-minimal .entry-header { display: flex; justify-content: space-between; align-items: baseline; }
+.resume-paper.tpl-minimal .entry-title { font-size: 10.5pt; font-weight: 600; color: #1a1a1a; }
+.resume-paper.tpl-minimal .entry-company { font-size: 9pt; color: #6b7280; }
+.resume-paper.tpl-minimal .entry-date { font-size: 9pt; color: #9ca3af; white-space: nowrap; }
+.resume-paper.tpl-minimal .entry-desc { font-size: 9.5pt; color: #4b5563; margin-top: 2px; white-space: pre-line; }
+.resume-paper.tpl-minimal .skills-list { display: flex; flex-wrap: wrap; gap: 12px; }
+.resume-paper.tpl-minimal .skill-tag { font-size: 9pt; color: #6b7280; }
+.resume-paper.tpl-minimal .contact-row {
+  display: flex; flex-wrap: wrap; gap: 16px; font-size: 9pt; color: #9ca3af; margin-bottom: 16px;
+}
+
+/* ── MINI VARIANT (template gallery previews) ──
+   Placed after the template blocks so overrides win specificity ties. */
+.resume-paper.paper-mini {
+  padding: 10px;
+  box-shadow: none;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  font-size: 5pt;
+}
+.resume-paper.paper-mini .resume-name { font-size: 11pt; margin-bottom: 1px; }
+.resume-paper.paper-mini .resume-tagline { font-size: 5pt; margin-bottom: 4px; }
+.resume-paper.paper-mini .contact-row { font-size: 4pt; gap: 6px; margin-bottom: 6px; }
+.resume-paper.paper-mini .resume-section { margin-bottom: 6px; }
+.resume-paper.paper-mini .resume-section-title { font-size: 4.5pt; padding-bottom: 1px; margin-bottom: 3px; }
+.resume-paper.paper-mini .resume-entry { margin-bottom: 4px; }
+.resume-paper.paper-mini .entry-title { font-size: 5.5pt; }
+.resume-paper.paper-mini .entry-company { font-size: 4.5pt; }
+.resume-paper.paper-mini .entry-date { font-size: 4pt; }
+.resume-paper.paper-mini .entry-desc { font-size: 4.5pt; margin-top: 1px; }
+.resume-paper.paper-mini .skill-tag { font-size: 4pt; padding: 0 3px; }
+.resume-paper.paper-mini .skill-group { font-size: 4.5pt; margin-bottom: 2px; }
+.resume-paper.paper-mini .resume-empty { font-size: 5pt; margin-top: 20px; }
+
+/* ── PRINT ── */
+@media print {
+  body * { visibility: hidden; }
+  .resume-paper, .resume-paper * { visibility: visible; }
+  .resume-paper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    margin: 0;
+    border-radius: 0;
+    padding: 20mm;
+  }
+}
+
