@@ -1,21 +1,41 @@
+import { useEffect, useState } from 'react';
 import { Link } from '../../router.jsx';
+import Icon from '../Icon.jsx';
 
-// Platform shell (mirrors the real Lanjut /platform structure):
+// Platform shell (mirrors the original Lanjut /platform structure):
 // sidebar sections "Platform", "My Resume", and "Other".
 export default function PlatformLayout({ route, resumes, onNew, onResetData, children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Close the drawer whenever the route changes (e.g. after a nav click).
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [route]);
+
   return (
     <div className="platform">
-      <aside className="platform-sidebar">
+      <button
+        type="button"
+        className="platform-menu-btn"
+        aria-label="Toggle navigation menu"
+        aria-expanded={sidebarOpen}
+        onClick={() => setSidebarOpen((v) => !v)}
+      >
+        <Icon name="menu" size={18} />
+      </button>
+      <aside className={`platform-sidebar${sidebarOpen ? ' open' : ''}`}>
         <Link to="/" className="platform-logo">
-          Lanjut <span>Platform</span>
+          Resuma <span>Platform</span>
         </Link>
 
         <div className="side-section">Platform</div>
         <Link to="/dashboard" className={`side-link${route === '/dashboard' ? ' active' : ''}`}>
-          📊 Dashboard
+          <Icon name="layout-dashboard" size={15} />
+          <span className="side-label">Dashboard</span>
         </Link>
         <Link to="/templates" className={`side-link${route === '/templates' ? ' active' : ''}`}>
-          🎨 Browse Template
+          <Icon name="layout-template" size={15} />
+          <span className="side-label">Browse Template</span>
         </Link>
 
         <div className="side-section">My Resume</div>
@@ -26,22 +46,30 @@ export default function PlatformLayout({ route, resumes, onNew, onResetData, chi
             className={`side-link side-resume${route === '/builder/' + r.id ? ' active' : ''}`}
             title={r.title || 'Untitled Resume'}
           >
-            📄 {r.title || 'Untitled Resume'}
+            <Icon name="file-text" size={15} />
+            <span className="side-label">{r.title || 'Untitled Resume'}</span>
           </Link>
         ))}
         <button type="button" className="side-link side-new" onClick={onNew}>
-          ＋ New Resume
+          <Icon name="plus" size={15} />
+          <span className="side-label">New Resume</span>
         </button>
 
         <div className="side-section">Other</div>
         <Link to="/" className="side-link">
-          🏠 Home
+          <Icon name="home" size={15} />
+          <span className="side-label">Home</span>
         </Link>
         <button type="button" className="side-link side-danger" onClick={onResetData}>
-          ⚠ Reset All Data
+          <Icon name="triangle-alert" size={15} />
+          <span className="side-label">Reset All Data</span>
         </button>
       </aside>
+      {sidebarOpen && (
+        <div className="platform-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
+      )}
       <main className="platform-main">{children}</main>
     </div>
   );
 }
+

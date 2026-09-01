@@ -1,3 +1,5 @@
+import Icon from '../Icon.jsx';
+
 // ATS Readiness meter — checks that every ATS-essential section
 // is filled in, mirroring the "Land the interview" promise.
 const CHECKS = [
@@ -48,7 +50,8 @@ export default function AtsChecklist({ open, data }) {
   return (
     <div className={`ats-readback ats-checklist${open ? ' show' : ''}`}>
       <h4>
-        🎯 ATS Readiness — {passed}/{results.length} sections complete
+        <Icon name="target" size={14} />
+        ATS Readiness — {passed}/{results.length} sections complete
       </h4>
       <div className="meter">
         <div className="meter-fill" style={{ width: pct + '%' }} />
@@ -56,7 +59,7 @@ export default function AtsChecklist({ open, data }) {
       <ul className="check-list">
         {results.map((r) => (
           <li key={r.id} className={`check-item${r.pass ? ' done' : ''}`}>
-            <span className="check-icon">{r.pass ? '✓' : '○'}</span>
+            <Icon name={r.pass ? 'check' : 'circle'} size={12} className="check-icon" />
             <span>{r.label}</span>
           </li>
         ))}
@@ -68,9 +71,11 @@ export default function AtsChecklist({ open, data }) {
         </p>
       ) : (
         <p className="check-hint ok">
-          ✓ All set — your resume covers every ATS-essential section.
+          <Icon name="circle-check" size={12} />
+          All set — your resume covers every ATS-essential section.
         </p>
       )}
     </div>
   );
 }
+

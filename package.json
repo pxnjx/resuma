@@ -1,8 +1,8 @@
 {
-  "name": "lanjut-resume-builder",
+  "name": "resuma-resume-builder",
   "private": true,
-  "version": "1.1.0",
-  "description": "Lanjut — Free, local-first ATS resume builder (React + Vite)",
+  "version": "1.2.0",
+  "description": "Resuma — Free, local-first ATS resume builder (React + Vite)",
   "type": "module",
   "scripts": {
     "dev": "vite",

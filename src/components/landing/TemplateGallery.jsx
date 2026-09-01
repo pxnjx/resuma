@@ -41,7 +41,7 @@ export default function TemplateGallery({ onCreate }) {
             </div>
             <div className="gallery-card-info">
               <h4>{t.name}</h4>
-              <p>{t.desc} — click to start →</p>
+              <p>{t.desc} — click to start</p>
             </div>
           </div>
         ))}

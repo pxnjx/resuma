@@ -40,8 +40,8 @@ export const sampleResume = {
   ],
   projects: [
     {
-      name: 'Lanjut Resume Builder',
-      link: 'github.com/budisantoso/lanjut',
+      name: 'Resuma Resume Builder',
+      link: 'github.com/budisantoso/resuma',
       desc: '• Open-source, local-first ATS resume builder\n• React + Vite, zero backend — everything stays in the browser',
     },
   ],

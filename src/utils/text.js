@@ -2,8 +2,8 @@
 //  Text generation: plain-text export + ATS parser readback.
 //  Both derive directly from state (no DOM walking), guaranteeing
 //  "reading order intact" output.
-//  Section order mirrors ResumePaper: Summary → Experience →
-//  Education → Projects → Certifications → Languages → Skills.
+//  Section order mirrors ResumePaper: Summary -> Experience ->
+//  Education -> Projects -> Certifications -> Languages -> Skills.
 // ─────────────────────────────────────────────────────────────
 
 function contactPartsOf(s) {

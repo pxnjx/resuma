@@ -2,7 +2,7 @@
    Resume paper + templates (modern / classic / minimal).
    Ported from ats.html — the truncated template CSS has been
    completed. This file is also imported with ?raw by the
-   PDF/DOCX exporters so exports match the on-screen preview.
+   HTML exporter so the export matches the on-screen preview.
    ═══════════════════════════════════════════════════════════ */
 
 /* ── BASE PAPER ── */

@@ -12,10 +12,12 @@ export default function App() {
   const route = useHashRoute();
   const { resumes, actions } = useResumeLibrary();
   const [toastMessage, setToastMessage] = useState(null);
+  const [toastType, setToastType] = useState('success');
   const toastTimer = useRef(null);
 
-  const showToast = useCallback((message) => {
+  const showToast = useCallback((message, type = 'success') => {
     setToastMessage(message);
+    setToastType(type);
     if (toastTimer.current) clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToastMessage(null), 2600);
   }, []);
@@ -36,16 +38,17 @@ export default function App() {
   const builderMatch = route.match(/^\/builder\/(.+)$/);
 
   const handleNew = useCallback(() => {
-    const id = actions.createResume({}, 'Untitled Resume');
-    navigate('/builder/' + id);
-    showToast('✨ New resume created');
-  }, [actions, showToast]);
+    // Don't create a resume right away — send the user to the
+    // template picker first so they choose a starting template.
+    navigate('/templates');
+    showToast('Pick a template to start a new resume', 'info');
+  }, [showToast]);
 
   const handleCreateFromTemplate = useCallback(
     (templateId, templateName) => {
       const id = actions.createResume({ template: templateId }, 'Untitled Resume');
       navigate('/builder/' + id);
-      showToast('✨ Resume created from the ' + templateName + ' template');
+      showToast('Resume created from the ' + templateName + ' template', 'success');
     },
     [actions, showToast]
   );
@@ -53,7 +56,7 @@ export default function App() {
   const handleDuplicate = useCallback(
     (id) => {
       actions.duplicateResume(id);
-      showToast('⧉ Resume duplicated');
+      showToast('Resume duplicated', 'info');
     },
     [actions, showToast]
   );
@@ -62,7 +65,7 @@ export default function App() {
     (id) => {
       if (window.confirm('Delete this resume? This cannot be undone.')) {
         actions.deleteResume(id);
-        showToast('🗑 Resume deleted');
+        showToast('Resume deleted', 'warn');
         if (route.startsWith('/builder/')) navigate('/dashboard');
       }
     },
@@ -73,7 +76,7 @@ export default function App() {
     if (window.confirm('Reset ALL data? Every saved resume will be replaced by the sample.')) {
       actions.resetLibrary();
       navigate('/dashboard');
-      showToast('⚠ All data has been reset');
+      showToast('All data has been reset', 'warn');
     }
   }, [actions, showToast]);
 
@@ -145,7 +148,7 @@ export default function App() {
   return (
     <>
       {page}
-      <Toast message={toastMessage} />
+      <Toast message={toastMessage} type={toastType} />
     </>
   );
 }

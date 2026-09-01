@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { normalizeResume } from '../data/schema.js';
 import { sampleResume } from '../data/sampleResume.js';
 
-export const LIB_KEY = 'lanjut_resume_library_v1';
+export const LIB_KEY = 'resuma_resume_library_v1';
+const PREVIOUS_LIB_KEY = 'lanjut_resume_library_v1';
 const LEGACY_KEY = 'lanjut_resume_state';
 
 function uid() {
@@ -13,30 +14,33 @@ function makeResume(data, title, id = uid(), now = Date.now()) {
   return { id, title, createdAt: now, updatedAt: now, data: normalizeResume(data) };
 }
 
-function loadLibrary() {
-  let resumes = null;
+function readResumesFromKey(key) {
   try {
-    const raw = localStorage.getItem(LIB_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && Array.isArray(parsed.resumes)) {
-        resumes = parsed.resumes
-          .filter((r) => r && typeof r === 'object' && r.id && r.data)
-          .map((r) => ({
-            id: String(r.id),
-            title: String(r.title || 'Untitled Resume'),
-            createdAt: Number(r.createdAt) || Date.now(),
-            updatedAt: Number(r.updatedAt) || Date.now(),
-            data: normalizeResume(r.data),
-          }));
-      }
-    }
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.resumes)) return null;
+    return parsed.resumes
+      .filter((r) => r && typeof r === 'object' && r.id && r.data)
+      .map((r) => ({
+        id: String(r.id),
+        title: String(r.title || 'Untitled Resume'),
+        createdAt: Number(r.createdAt) || Date.now(),
+        updatedAt: Number(r.updatedAt) || Date.now(),
+        data: normalizeResume(r.data),
+      }));
   } catch (err) {
-    resumes = null;
+    return null;
   }
+}
+
+function loadLibrary() {
+  // Migration chain: current key -> pre-rename library key -> the legacy
+  // single-resume key from the original prototype. Old keys are cleaned
+  // up after a successful load so data is never lost.
+  let resumes = readResumesFromKey(LIB_KEY) || readResumesFromKey(PREVIOUS_LIB_KEY);
 
   if (!resumes) {
-    // One-time migration from the legacy single-resume key.
     try {
       const old = localStorage.getItem(LEGACY_KEY);
       if (old) {
@@ -53,6 +57,7 @@ function loadLibrary() {
   }
 
   try {
+    localStorage.removeItem(PREVIOUS_LIB_KEY);
     localStorage.removeItem(LEGACY_KEY);
   } catch (err) {
     // ignore

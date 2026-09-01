@@ -1,4 +1,6 @@
 import { Link } from '../../router.jsx';
+import Icon from '../Icon.jsx';
+import ResumePaper from '../builder/ResumePaper.jsx';
 
 function formatRelative(ts) {
   const diff = Date.now() - ts;
@@ -12,12 +14,8 @@ function formatRelative(ts) {
   return new Date(ts).toLocaleDateString();
 }
 
-// Dashboard page — stats + "My Resume" card grid.
+// Dashboard page — "My Resume" card grid with live previews.
 export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
-  const lastEdited = resumes.length
-    ? Math.max(...resumes.map((r) => r.updatedAt || 0))
-    : null;
-
   return (
     <div>
       <div className="dash-header">
@@ -26,23 +24,9 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
           <div className="dash-title">My Resume</div>
         </div>
         <button type="button" className="btn-primary" onClick={onNew}>
-          ＋ New Resume
+          <Icon name="plus" size={15} />
+          New Resume
         </button>
-      </div>
-
-      <div className="dash-stats">
-        <div className="dash-stat">
-          <div className="dash-stat-value">{resumes.length}</div>
-          <div className="dash-stat-label">Resumes</div>
-        </div>
-        <div className="dash-stat">
-          <div className="dash-stat-value">3</div>
-          <div className="dash-stat-label">Templates</div>
-        </div>
-        <div className="dash-stat">
-          <div className="dash-stat-value">{lastEdited ? formatRelative(lastEdited) : '—'}</div>
-          <div className="dash-stat-label">Last Edited</div>
-        </div>
       </div>
 
       {resumes.length === 0 ? (
@@ -50,13 +34,17 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
           <h3>No resumes yet</h3>
           <p>Create your first resume — pick a template or start from scratch.</p>
           <button type="button" className="btn-primary" onClick={onNew}>
-            ＋ Create Resume
+            <Icon name="plus" size={15} />
+            Create Resume
           </button>
         </div>
       ) : (
         <div className="resume-grid">
           {resumes.map((r) => (
             <div className="resume-card" key={r.id}>
+              <Link to={'/builder/' + r.id} className="resume-card-preview" title="Open in editor">
+                <ResumePaper data={r.data} template={r.data?.template || 'modern'} mini />
+              </Link>
               <Link to={'/builder/' + r.id} className="resume-card-title">
                 {r.title || 'Untitled Resume'}
               </Link>
@@ -66,10 +54,12 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
               </div>
               <div className="resume-card-actions">
                 <Link to={'/builder/' + r.id} className="mini-btn">
-                  ✏️ Edit
+                  <Icon name="pencil" size={12} />
+                  Edit
                 </Link>
                 <button type="button" className="mini-btn" onClick={() => onDuplicate(r.id)}>
-                  ⧉ Duplicate
+                  <Icon name="copy" size={12} />
+                  Duplicate
                 </button>
                 <button
                   type="button"
@@ -77,7 +67,7 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
                   title="Delete resume"
                   onClick={() => onDelete(r.id)}
                 >
-                  🗑
+                  <Icon name="trash-2" size={12} />
                 </button>
               </div>
             </div>
@@ -87,3 +77,4 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
     </div>
   );
 }
+

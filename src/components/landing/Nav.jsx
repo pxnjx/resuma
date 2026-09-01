@@ -1,4 +1,5 @@
 import { navigate } from '../../router.jsx';
+import Icon from '../Icon.jsx';
 
 function scrollToId(id) {
   return (e) => {
@@ -28,16 +29,18 @@ export default function Nav() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       >
-        Lanjut <span>Resume Builder</span>
+        Resuma <span>Resume Builder</span>
       </a>
       <div className="nav-links">
         <a href="#features" onClick={scrollToId('features')}>Features</a>
         <a href="#how-it-works" onClick={scrollToId('how-it-works')}>How it works</a>
         <a href="#templates" onClick={scrollToId('templates')}>Templates</a>
         <a href="#/dashboard" className="btn-nav" onClick={go('/dashboard')}>
-          Open Platform →
+          <Icon name="arrow-right" size={13} />
+          Open Platform
         </a>
       </div>
     </nav>
   );
 }
+

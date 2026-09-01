@@ -14,8 +14,8 @@ const STEPS = [
   {
     num: '03',
     title: 'Survive the parser',
-    text: "Download PDF, DOCX, or plain text, and any extractor reads it back in the order you wrote it. That's the whole trick.",
-    tags: ['.pdf', '.docx', '.txt'],
+    text: 'Download PDF, DOCX, Markdown, or plain text, and any extractor reads it back in the order you wrote it.',
+    tags: ['.pdf', '.docx', '.md', '.txt'],
   },
 ];
 

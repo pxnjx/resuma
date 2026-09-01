@@ -46,7 +46,7 @@ export default function ProjectsTab({ data, actions }) {
               className="field-input"
               value={entry.name}
               onChange={(e) => actions.updateProject(i, 'name', e.target.value)}
-              placeholder="e.g. Lanjut Resume Builder"
+              placeholder="e.g. Resuma Resume Builder"
             />
           </Field>
           <Field label="Link (optional)">

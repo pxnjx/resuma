@@ -1,9 +1,13 @@
 import { Link } from '../../router.jsx';
+import Icon from '../Icon.jsx';
 
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="badge">Free &amp; Open Source</div>
+      <div className="badge">
+        <Icon name="star" size={12} />
+        Free &amp; Open Source
+      </div>
       <h1>
         Land The Interview,
         <br />
@@ -15,7 +19,10 @@ export default function Hero() {
         to sail through applicant tracking systems.
       </p>
       <div className="hero-buttons">
-        <Link to="/dashboard" className="btn-primary">▶&ensp;Start Building Free</Link>
+        <Link to="/dashboard" className="btn-primary">
+          <Icon name="play" size={14} />
+          Start Building Free
+        </Link>
         <Link to="/templates" className="btn-secondary">Browse Templates</Link>
       </div>
       <div className="stats">
@@ -39,3 +46,4 @@ export default function Hero() {
     </section>
   );
 }
+
