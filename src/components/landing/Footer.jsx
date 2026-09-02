@@ -9,7 +9,7 @@ export default function Footer() {
       </p>
       <p style={{ marginTop: 8 }}>
         Your resume never leaves your browser. Open the{' '}
-        <Link to="/dashboard">platform dashboard</Link> to start building.
+        <Link to="/dashboard">Dashboard</Link> to start building.
       </p>
     </footer>
   );

@@ -25,10 +25,10 @@ export default function PlatformLayout({ route, resumes, onNew, onResetData, chi
       </button>
       <aside className={`platform-sidebar${sidebarOpen ? ' open' : ''}`}>
         <Link to="/" className="platform-logo">
-          Resuma <span>Platform</span>
+          Resuma <span>Builder</span>
         </Link>
 
-        <div className="side-section">Platform</div>
+        <div className="side-section">Dashboard</div>
         <Link to="/dashboard" className={`side-link${route === '/dashboard' ? ' active' : ''}`}>
           <Icon name="layout-dashboard" size={15} />
           <span className="side-label">Dashboard</span>

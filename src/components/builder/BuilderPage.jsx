@@ -12,10 +12,6 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
   const editor = useResumeEditor(resume, onChangeData);
   const fileInputRef = useRef(null);
 
-  function handleImportClick() {
-    if (fileInputRef.current) fileInputRef.current.click();
-  }
-
   function handleImportFile(e) {
     const file = e.target.files && e.target.files[0];
     e.target.value = '';
@@ -52,45 +48,21 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
           <Icon name="arrow-left" size={14} />
           Dashboard
         </Link>
-        <input
-          className="builder-title-input"
-          value={resume.title || ''}
-          onChange={(e) => onRename(resume.id, e.target.value)}
-          placeholder="Resume title"
-          title="Rename this resume"
-        />
-        <span className="save-badge">
-          <Icon name="check" size={13} />
-          Auto-saved
-        </span>
-        <div className="builder-topbar-actions">
-          <button type="button" className="export-btn" onClick={handleClearAll}>
-            <Icon name="eraser" size={13} />
-            Clear Fields
-          </button>
-          <button type="button" className="export-btn" onClick={handleLoadSample}>
-            <Icon name="sparkles" size={13} />
-            Load Sample
-          </button>
-          <button type="button" className="export-btn" onClick={handleImportClick}>
-            <Icon name="upload" size={13} />
-            Import JSON
-          </button>
-          <button
-            type="button"
-            className="export-btn danger"
-            title="Delete this resume"
-            onClick={() => onDelete(resume.id)}
-          >
-            <Icon name="trash-2" size={13} />
-            Delete
-          </button>
-        </div>
       </div>
 
       <div className="editor-layout">
         <EditorTabs data={editor.data} actions={editor.actions} />
-        <ResumePreview data={editor.data} actions={editor.actions} showToast={showToast} />
+        <ResumePreview
+          data={editor.data}
+          actions={editor.actions}
+          showToast={showToast}
+          resumeTitle={resume.title || ''}
+          onRename={(v) => onRename(resume.id, v)}
+          onClearAll={handleClearAll}
+          onLoadSample={handleLoadSample}
+          onImportJson={() => fileInputRef.current?.click()}
+          onDelete={() => onDelete(resume.id)}
+        />
       </div>
 
       <input

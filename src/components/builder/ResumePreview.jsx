@@ -19,7 +19,17 @@ const TEMPLATES = [
   { id: 'minimal', label: 'N', title: 'Minimal' },
 ];
 
-export default function ResumePreview({ data, actions, showToast }) {
+export default function ResumePreview({
+  data,
+  actions,
+  showToast,
+  resumeTitle,
+  onRename,
+  onClearAll,
+  onLoadSample,
+  onImportJson,
+  onDelete,
+}) {
   const paperRef = useRef(null);
   const exportRef = useRef(null);
   const [showAts, setShowAts] = useState(false);
@@ -71,6 +81,21 @@ export default function ResumePreview({ data, actions, showToast }) {
 
   return (
     <div className="preview-area">
+      {/* Title + auto-saved status (moved down into the Live Preview section) */}
+      <div className="preview-title-row">
+        <input
+          className="builder-title-input"
+          value={resumeTitle}
+          onChange={(e) => onRename(e.target.value)}
+          placeholder="Resume title"
+          title="Rename this resume"
+        />
+        <span className="save-badge">
+          <Icon name="check" size={13} />
+          Auto-saved
+        </span>
+      </div>
+
       <div className="preview-toolbar">
         <div className="preview-toolbar-left">
           <span className="preview-label">Live Preview</span>
@@ -215,6 +240,31 @@ export default function ResumePreview({ data, actions, showToast }) {
         >
           <Icon name="target" size={14} />
           Readiness
+        </button>
+      </div>
+
+      {/* Resume actions (moved from the topbar into the Live Preview section) */}
+      <div className="preview-actions">
+        <button type="button" className="export-btn" onClick={onClearAll}>
+          <Icon name="eraser" size={13} />
+          Clear Fields
+        </button>
+        <button type="button" className="export-btn" onClick={onLoadSample}>
+          <Icon name="sparkles" size={13} />
+          Load Sample
+        </button>
+        <button type="button" className="export-btn" onClick={onImportJson}>
+          <Icon name="upload" size={13} />
+          Import JSON
+        </button>
+        <button
+          type="button"
+          className="export-btn danger"
+          title="Delete this resume"
+          onClick={onDelete}
+        >
+          <Icon name="trash-2" size={13} />
+          Delete
         </button>
       </div>
 
