@@ -36,8 +36,8 @@ export default function Nav() {
         <a href="#how-it-works" onClick={scrollToId('how-it-works')}>How it works</a>
         <a href="#templates" onClick={scrollToId('templates')}>Templates</a>
         <a href="#/dashboard" className="btn-nav" onClick={go('/dashboard')}>
+          Open Dashboard
           <Icon name="arrow-right" size={13} />
-          Open Platform
         </a>
       </div>
     </nav>
