@@ -2,9 +2,9 @@ import ResumePaper from '../builder/ResumePaper.jsx';
 import { sampleResume } from '../../data/sampleResume.js';
 
 const TEMPLATE_CARDS = [
-  { id: 'modern', name: 'Modern', desc: 'Bold accents, clean layout' },
-  { id: 'classic', name: 'Classic', desc: 'Traditional, professional' },
-  { id: 'minimal', name: 'Minimal', desc: 'Clean, lots of whitespace' },
+  { id: 'modern', name: 'Modern', desc: 'Bold accents, airy layout' },
+  { id: 'classic', name: 'Classic', desc: 'Formal serif, timeless tone' },
+  { id: 'minimal', name: 'Minimal', desc: 'Quiet whitespace, sharp focus' },
 ];
 
 // Browse Template page — picking one creates a new resume with that
@@ -15,12 +15,12 @@ export default function TemplatesPage({ onCreate }) {
       <div className="dash-header">
         <div>
           <div className="section-label">Browse Template</div>
-          <div className="dash-title">Pick your style</div>
+          <div className="dash-title">Choose a starting point</div>
         </div>
       </div>
       <p className="tpl-page-sub">
-        Each template keeps the same ATS-safe structure — only typography,
-        spacing, and accents change. Pick one to start a new resume.
+        Three design directions built on the same content structure. Pick one
+        to start a new resume — you can switch templates anytime.
       </p>
       <div className="tpl-page-grid">
         {TEMPLATE_CARDS.map((t) => (
@@ -36,7 +36,7 @@ export default function TemplatesPage({ onCreate }) {
                 className="btn-primary tpl-use-btn"
                 onClick={() => onCreate(t.id, t.name)}
               >
-                Use This Template
+                Start With {t.name}
               </button>
             </div>
           </div>
