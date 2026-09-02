@@ -42,33 +42,35 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
         <div className="resume-grid">
           {resumes.map((r) => (
             <div className="resume-card" key={r.id}>
-              <Link to={'/builder/' + r.id} className="resume-card-preview" title="Open in editor">
+              <Link to={'/builder/' + r.id} className="gallery-card-preview resume-card-preview" title="Open in editor">
                 <ResumePaper data={r.data} template={r.data?.template || 'modern'} mini />
               </Link>
-              <Link to={'/builder/' + r.id} className="resume-card-title">
-                {r.title || 'Untitled Resume'}
-              </Link>
-              <div className="resume-card-meta">
-                {r.data?.name || 'No name yet'} · {r.data?.template || 'modern'} ·{' '}
-                {formatRelative(r.updatedAt)}
-              </div>
-              <div className="resume-card-actions">
-                <Link to={'/builder/' + r.id} className="mini-btn">
-                  <Icon name="pencil" size={12} />
-                  Edit
+              <div className="resume-card-info">
+                <Link to={'/builder/' + r.id} className="resume-card-title">
+                  {r.title || 'Untitled Resume'}
                 </Link>
-                <button type="button" className="mini-btn" onClick={() => onDuplicate(r.id)}>
-                  <Icon name="copy" size={12} />
-                  Duplicate
-                </button>
-                <button
-                  type="button"
-                  className="mini-btn danger"
-                  title="Delete resume"
-                  onClick={() => onDelete(r.id)}
-                >
-                  <Icon name="trash-2" size={12} />
-                </button>
+                <div className="resume-card-meta">
+                  {r.data?.name || 'No name yet'} · {r.data?.template || 'modern'} ·{' '}
+                  {formatRelative(r.updatedAt)}
+                </div>
+                <div className="resume-card-actions">
+                  <Link to={'/builder/' + r.id} className="mini-btn">
+                    <Icon name="pencil" size={12} />
+                    Edit
+                  </Link>
+                  <button type="button" className="mini-btn" onClick={() => onDuplicate(r.id)}>
+                    <Icon name="copy" size={12} />
+                    Duplicate
+                  </button>
+                  <button
+                    type="button"
+                    className="mini-btn danger"
+                    title="Delete resume"
+                    onClick={() => onDelete(r.id)}
+                  >
+                    <Icon name="trash-2" size={12} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

@@ -33,6 +33,8 @@ export default function LanguagesTab({ data, actions }) {
         <EntryCard
           key={i}
           index={i}
+          total={data.languages.length}
+          onMove={actions.moveLanguage}
           dragFrom={dragFrom}
           overIndex={overIndex}
           onDragStart={onDragStart}

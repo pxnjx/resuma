@@ -39,7 +39,7 @@ function buildPrintDocument(state, paperEl) {
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { background:#ffffff; }
   ${resumeCss}
-  .resume-paper { box-shadow:none; margin:0; }
+  .resume-paper { box-shadow:none; margin:0; max-height:none; min-height:0; height:auto; overflow:visible; }
 </style>
 </head>
 <body>${paperEl.outerHTML}</body>

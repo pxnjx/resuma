@@ -33,6 +33,8 @@ export default function EducationTab({ data, actions }) {
         <EntryCard
           key={i}
           index={i}
+          total={data.education.length}
+          onMove={actions.moveEducation}
           dragFrom={dragFrom}
           overIndex={overIndex}
           onDragStart={onDragStart}

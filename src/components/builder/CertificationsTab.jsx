@@ -33,6 +33,8 @@ export default function CertificationsTab({ data, actions }) {
         <EntryCard
           key={i}
           index={i}
+          total={data.certifications.length}
+          onMove={actions.moveCertification}
           dragFrom={dragFrom}
           overIndex={overIndex}
           onDragStart={onDragStart}

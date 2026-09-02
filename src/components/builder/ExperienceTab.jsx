@@ -33,6 +33,8 @@ export default function ExperienceTab({ data, actions }) {
         <EntryCard
           key={i}
           index={i}
+          total={data.experience.length}
+          onMove={actions.moveExperience}
           dragFrom={dragFrom}
           overIndex={overIndex}
           onDragStart={onDragStart}

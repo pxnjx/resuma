@@ -33,6 +33,8 @@ export default function ProjectsTab({ data, actions }) {
         <EntryCard
           key={i}
           index={i}
+          total={data.projects.length}
+          onMove={actions.moveProject}
           dragFrom={dragFrom}
           overIndex={overIndex}
           onDragStart={onDragStart}

@@ -262,10 +262,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
 }
 .preview-toolbar-left { display: flex; align-items: center; gap: 8px; }
 .preview-label { font-size: 12px; color: var(--text3); margin-left: 8px; }
-.preview-dot { width: 10px; height: 10px; border-radius: 50%; }
-.preview-dot.red { background: #ff5f57; }
-.preview-dot.yellow { background: #febc2e; }
-.preview-dot.green { background: #28c840; }
 .template-selector { display: flex; gap: 6px; align-items: center; }
 .template-selector label { font-size: 12px; color: var(--text3); font-weight: 600; }
 .tpl-btn {
@@ -413,6 +409,33 @@ footer a:hover { text-decoration: underline; }
 /* The ✕ button now lives inside .entry-card-head next to the drag
    handle, so it no longer needs absolute positioning. */
 .entry-card .remove-entry { position: static; }
+/* Left tool group: drag handle + up/down move buttons */
+.entry-card-tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.entry-card .move-entry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text3);
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.entry-card .move-entry:hover:not(:disabled) {
+  color: var(--accent2);
+  background: var(--accent-dim);
+}
+.entry-card .move-entry:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
 
 /* ── ACCENT COLOR PICKER ── */
 .accent-label { font-size: 12px; color: var(--text3); font-weight: 600; }
@@ -496,6 +519,12 @@ footer a:hover { text-decoration: underline; }
 .side-new { color: var(--accent2); font-weight: 600; }
 .side-danger:hover { color: var(--red); background: rgba(240, 78, 78, 0.1); }
 .platform-main { padding: 32px; min-width: 0; }
+/* Burger toggle: hidden on desktop (grid must only contain sidebar + main) */
+.platform-menu-btn { display: none; }
+/* Guard: backdrop must never block desktop UI (e.g. drawer left open while resizing) */
+@media (min-width: 901px) {
+  .platform-sidebar-backdrop { display: none; }
+}
 
 /* ── DASHBOARD ── */
 .dash-header {
@@ -534,12 +563,16 @@ footer a:hover { text-decoration: underline; }
 }
 .resume-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  overflow: hidden;
   transition: all 0.2s;
 }
-.resume-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+/* Same card shape as the template gallery: white preview flush to the edges */
+.resume-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.resume-card-preview { display: block; }
+.resume-card .gallery-card-preview { height: 220px; }
+.resume-card-info { padding: 12px 14px 14px; }
 .resume-card-title {
   display: block;
   font-weight: 700;
@@ -685,7 +718,7 @@ footer a:hover { text-decoration: underline; }
     to { opacity: 1; }
   }
   .platform-main {
-    padding: 20px 16px 20px 60px;
+    padding: 64px 16px 20px;
   }
   .builder-topbar-actions { margin-left: 0; }
 }
@@ -777,6 +810,197 @@ footer a:hover { text-decoration: underline; }
 .gallery-card:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* ── BUILDER PREVIEW: card shape mirroring the template gallery, but with its
+   own class so it never conflicts with dashboard (.resume-card) styles ── */
+.builder-preview-card {
+  height: 300px;
+  max-width: 320px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: zoom-in;
+  transition: border-color 0.15s;
+}
+.builder-preview-card:hover,
+.builder-preview-card:focus-visible {
+  border-color: var(--accent);
+}
+.builder-preview-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+/* Off-screen full-size paper used only as the HTML-export markup source */
+.export-paper-source { display: none; }
+@media (max-width: 900px) {
+  .preview-area { padding: 18px; }
+}
+@media (max-width: 640px) {
+  .preview-area { padding: 16px; }
+}
+
+/* ── EXPORT MENU: single Export button with a format dropdown ── */
+.export-menu { position: relative; }
+.export-menu-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px; font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.export-menu-btn:hover { background: var(--accent2); border-color: var(--accent2); }
+.export-menu-btn .em-chevron { transition: transform 0.15s; }
+.export-menu-btn.open .em-chevron { transform: rotate(180deg); }
+.export-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 60;
+  min-width: 240px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: em-pop 0.12s ease;
+}
+@keyframes em-pop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.export-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.export-menu-item:hover { background: var(--accent-dim); }
+.export-menu-item .em-icon { color: var(--accent2); flex: none; }
+.export-menu-item .em-text { display: flex; flex-direction: column; line-height: 1.3; }
+.export-menu-item .em-name { font-weight: 600; }
+.export-menu-item .em-hint { font-size: 11px; color: var(--text3); }
+@media (max-width: 640px) {
+  .export-menu-dropdown { min-width: min(240px, calc(100vw - 64px)); }
+}
+
+/* ── EDITOR TABS: swipeable horizontally on mobile ── */
+@media (max-width: 900px) {
+  .editor-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none; /* hide scrollbar — swipe feels native */
+  }
+  .editor-tabs::-webkit-scrollbar { display: none; }
+  .editor-tab {
+    flex: 0 0 auto; /* never shrink → overflow becomes a swipe area */
+    scroll-snap-align: start;
+    padding: 10px 14px;
+  }
+}
+@media (max-width: 640px) {
+  .editor-tab { padding: 10px 12px; font-size: 12.5px; }
+}
+
+/* ── EDITOR SIDEBAR: never overflow the viewport on mobile ──
+   Grid/flex items default to min-width:auto — intrinsic <input>
+   widths + two-column .field-row would push the sidebar wider
+   than the screen. Let everything shrink and stack instead. */
+@media (max-width: 900px) {
+  .editor-layout > * { min-width: 0; }
+  .editor-sidebar { min-width: 0; max-width: 100%; overflow-x: hidden; }
+  .editor-panel.active > * { min-width: 0; }
+  .entry-card { min-width: 0; max-width: 100%; }
+  .field-row { grid-template-columns: 1fr; } /* two-column rows stack */
+  .field-row > .field-group { min-width: 0; }
+  .field-input { min-width: 0; width: 100%; }
+}
+
+/* ── FULL PREVIEW MODAL (opens from the builder thumbnail) ── */
+.preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  padding: 24px;
+  animation: em-pop 0.15s ease;
+}
+.preview-modal-inner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 860px;
+  max-height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.preview-modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.preview-modal-title { font-size: 13px; font-weight: 700; color: var(--text2); }
+.preview-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.preview-modal-close:hover { color: var(--text); border-color: var(--accent); }
+.preview-modal-scroll {
+  overflow-y: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+/* Paper inside the modal: full document at natural height — the modal scrolls */
+.preview-modal-scroll .resume-paper {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  max-width: 640px;
+  margin: 0 auto;
+}
+@media (max-width: 640px) {
+  .preview-modal { padding: 12px; }
+  .preview-modal-scroll { padding: 12px; }
 }
 
 

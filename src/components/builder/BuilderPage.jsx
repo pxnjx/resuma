@@ -1,24 +1,16 @@
 import { useRef } from 'react';
 import { Link } from '../../router.jsx';
 import { useResumeEditor } from '../../hooks/useResumeEditor.js';
-import { exportJSON, importResumeFromText } from '../../utils/exporters.js';
+import { importResumeFromText } from '../../utils/exporters.js';
 import EditorTabs from './EditorTabs.jsx';
 import ResumePreview from './ResumePreview.jsx';
+import Icon from '../Icon.jsx';
 
 // The resume builder on its own page (#/builder/:id). Edits are saved
 // to the library on every change (local-first, like the prototype).
 export default function BuilderPage({ resume, onChangeData, onRename, onDelete, showToast }) {
   const editor = useResumeEditor(resume, onChangeData);
   const fileInputRef = useRef(null);
-
-  function handleExportJSON() {
-    try {
-      exportJSON(editor.data);
-      showToast('✅ Data exported as .JSON');
-    } catch (err) {
-      showToast('❌ ' + (err.message || 'Export failed'));
-    }
-  }
 
   function handleImportClick() {
     if (fileInputRef.current) fileInputRef.current.click();
@@ -32,32 +24,33 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
     reader.onload = () => {
       try {
         editor.actions.importState(importResumeFromText(reader.result));
-        showToast('✅ Resume imported from JSON');
+        showToast('Resume imported from JSON');
       } catch (err) {
-        showToast('❌ ' + (err.message || 'Import failed'));
+        showToast(err.message || 'Import failed', 'error');
       }
     };
-    reader.onerror = () => showToast('❌ Failed to read file');
+    reader.onerror = () => showToast('Failed to read file', 'error');
     reader.readAsText(file);
   }
 
   function handleClearAll() {
     if (window.confirm('Clear all fields of this resume? This cannot be undone.')) {
       editor.actions.clearAll();
-      showToast('🧹 Fields cleared');
+      showToast('Fields cleared');
     }
   }
 
   function handleLoadSample() {
     editor.actions.loadSample();
-    showToast('✨ Sample data loaded');
+    showToast('Sample data loaded');
   }
 
   return (
     <div>
       <div className="builder-topbar">
         <Link to="/dashboard" className="builder-back">
-          ← Dashboard
+          <Icon name="arrow-left" size={14} />
+          Dashboard
         </Link>
         <input
           className="builder-title-input"
@@ -66,19 +59,22 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
           placeholder="Resume title"
           title="Rename this resume"
         />
-        <span className="save-badge">✓ Auto-saved</span>
+        <span className="save-badge">
+          <Icon name="check" size={13} />
+          Auto-saved
+        </span>
         <div className="builder-topbar-actions">
           <button type="button" className="export-btn" onClick={handleClearAll}>
-            🧹 Clear Fields
+            <Icon name="eraser" size={13} />
+            Clear Fields
           </button>
           <button type="button" className="export-btn" onClick={handleLoadSample}>
-            ✨ Load Sample
-          </button>
-          <button type="button" className="export-btn" onClick={handleExportJSON}>
-            ⬇ Export JSON
+            <Icon name="sparkles" size={13} />
+            Load Sample
           </button>
           <button type="button" className="export-btn" onClick={handleImportClick}>
-            ⬆ Import JSON
+            <Icon name="upload" size={13} />
+            Import JSON
           </button>
           <button
             type="button"
@@ -86,7 +82,8 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
             title="Delete this resume"
             onClick={() => onDelete(resume.id)}
           >
-            🗑 Delete
+            <Icon name="trash-2" size={13} />
+            Delete
           </button>
         </div>
       </div>
