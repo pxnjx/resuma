@@ -1,20 +1,20 @@
 const STEPS = [
   {
     num: '01',
-    title: 'Pick a template',
-    text: 'Start from a template you like. Each one only changes typography, spacing, and accents — the structure underneath stays ATS-safe.',
+    title: 'Choose a template',
+    text: 'Start with Modern, Classic, or Minimal. Switching templates changes the look — never your content or its order.',
     tags: ['Modern', 'Classic', 'Minimal'],
   },
   {
     num: '02',
-    title: 'Type it once',
-    text: "Fill structured sections: experience, education, skills. Every change lands in your browser's storage and nowhere else.",
-    tags: ['Auto-save', 'LocalStorage'],
+    title: 'Fill in the details',
+    text: 'Use the structured tabs to enter your history. Every keystroke is saved automatically to your browser as you go.',
+    tags: ['Auto-save', 'Your browser'],
   },
   {
     num: '03',
-    title: 'Survive the parser',
-    text: 'Download PDF, DOCX, Markdown, or plain text, and any extractor reads it back in the order you wrote it.',
+    title: 'Export & apply',
+    text: 'Download PDF, DOCX, Markdown, or plain text and send it off — the file stays in a clean, logical order from top to bottom.',
     tags: ['.pdf', '.docx', '.md', '.txt'],
   },
 ];
@@ -24,12 +24,12 @@ export default function HowItWorks() {
     <section className="steps" id="how-it-works">
       <div className="section-label">How it works</div>
       <div className="section-title">
-        The same resume
+        Three steps to a
         <br />
-        at every stage
+        stronger resume
       </div>
       <div className="section-sub">
-        What you type · What recruiters see · What the parser reads back
+        Pick a style · Fill your details · Export with confidence
       </div>
       {STEPS.map((s) => (
         <div className="step" key={s.num}>

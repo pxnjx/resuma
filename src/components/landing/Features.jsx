@@ -3,33 +3,33 @@ import Icon from '../Icon.jsx';
 const FEATURES = [
   {
     icon: 'lock',
-    title: '100% Local-First',
-    text: "Everything lives in your browser's localStorage. Your data never leaves your machine. No servers, no clouds, no tracking.",
+    title: 'Private by Default',
+    text: "All data stays in your browser's storage. Nothing is uploaded, tracked, or shared — close the tab and your work is waiting when you return.",
   },
   {
     icon: 'file-text',
-    title: 'ATS-Safe Exports',
-    text: 'PDF, DOCX, Markdown, and plain text — every export reads back in the order you wrote it.',
+    title: 'ATS-Friendly Every Time',
+    text: 'Every export keeps a linear reading order, so automated resume scanners find your details in the same order you wrote them.',
   },
   {
     icon: 'layout-template',
-    title: 'Beautiful Templates',
-    text: 'Pick from handcrafted templates. Each one changes only typography, spacing, and accents — the ATS-safe structure underneath stays intact.',
+    title: 'Three Distinct Styles',
+    text: 'Modern, Classic, and Minimal templates restyle typography and spacing — never the underlying content or its structure.',
   },
   {
     icon: 'zap',
-    title: 'Real-Time Preview',
-    text: 'See your resume update as you type. What you see is exactly what recruiters see — and what the parser reads back.',
+    title: 'Instant Live Preview',
+    text: 'Watch the resume update as you type across every section and template, so the final file always matches what you see.',
   },
   {
     icon: 'pencil',
-    title: 'Fine-Grained Editor',
-    text: 'Structured sections for experience, education, skills, and more. Every field is deliberate — no filler, no noise.',
+    title: 'Structured Simplicity',
+    text: 'Dedicated tabs for profile, experience, education, projects, certifications, languages, and skills keep everything organized.',
   },
   {
     icon: 'globe',
-    title: 'No Account Required',
-    text: 'Open the page, start building. Your work auto-saves locally. Come back anytime from the same browser.',
+    title: 'Zero Sign-Up',
+    text: 'Jump straight in without an account. Edits auto-save to your browser, and you can pick up where you left off on the same device.',
   },
 ];
 
@@ -37,10 +37,10 @@ export default function Features() {
   return (
     <section className="features" id="features">
       <div className="section-label">Why Resuma</div>
-      <div className="section-title">A fine-grained editor</div>
+      <div className="section-title">Everything you need, nothing you don&apos;t</div>
       <div className="section-sub">
-        Build your ATS-safe resume in a focused editor. No AI slop, no
-        overwhelming features. Straight to the point, without wasting your time.
+        Fill in structured sections, watch the preview update, and export in a
+        format that recruiters can actually read back.
       </div>
       <div className="feature-grid">
         {FEATURES.map((f) => (

@@ -2,9 +2,9 @@ import ResumePaper from '../builder/ResumePaper.jsx';
 import { sampleResume } from '../../data/sampleResume.js';
 
 const TEMPLATES = [
-  { id: 'modern', name: 'Modern', desc: 'Bold accents, clean layout' },
-  { id: 'classic', name: 'Classic', desc: 'Traditional, professional' },
-  { id: 'minimal', name: 'Minimal', desc: 'Clean, lots of whitespace' },
+  { id: 'modern', name: 'Modern', desc: 'Bold accents, airy layout' },
+  { id: 'classic', name: 'Classic', desc: 'Formal serif, timeless tone' },
+  { id: 'minimal', name: 'Minimal', desc: 'Quiet whitespace, sharp focus' },
 ];
 
 // Landing-page gallery — clicking a card immediately creates a new
@@ -15,10 +15,10 @@ export default function TemplateGallery({ onCreate }) {
   return (
     <section className="gallery" id="templates">
       <div className="section-label">Templates</div>
-      <div className="section-title">Pick your style</div>
+      <div className="section-title">Find your look</div>
       <div className="section-sub">
-        Each template keeps the same ATS-safe structure — only typography,
-        spacing, and accents change. Click one to start editing right away.
+        Three design directions, the same content underneath — pick the one
+        that fits you and start editing right away.
       </div>
       <div className="gallery-grid">
         {TEMPLATES.map((t) => (
