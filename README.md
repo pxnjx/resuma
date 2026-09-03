@@ -24,60 +24,60 @@ Built from scratch with **React 18 + Vite** (JavaScript/JSX), zero runtime depen
 - **Responsive design** — mobile-friendly with collapsible sidebar drawer, scrollable tabs, and touch-optimized ribbon interface
 - **SEO optimized** — Open Graph, Twitter Cards, Schema.org structured data, favicon
 
-## 🗺 Halaman (Hash Routing)
+## 🗺 Pages (Hash Routing)
 
-Router hash buatan sendiri (`src/router.jsx`) — tanpa dependency, aman untuk static hosting. Route yang tersedia:
+Custom hash router (`src/router.jsx`) — zero dependency, static-hosting safe. Available routes:
 
-| Route | Halaman |
+| Route | Page |
 |---|---|
-| `#/` | **Landing** — marketing page; klik kartu template → langsung buat resume & masuk builder |
-| `#/dashboard` | **Dashboard** — statistik + kartu "My Resume" (Edit / Duplicate / Delete) + New Resume |
-| `#/templates` | **Browse Template** — pilih template → langsung buat resume baru |
-| `#/builder/:id` | **Builder** — editor + preview untuk satu resume (judul bisa di-rename di top bar) |
+| `#/` | **Landing** — marketing page; click a template card to start building |
+| `#/dashboard` | **Dashboard** — statistics + "My Resume" cards (Edit / Duplicate / Delete) + New Resume |
+| `#/templates` | **Browse Template** — pick a template to create a new resume |
+| `#/builder/:id` | **Builder** — editor + preview for one resume (title is editable in the top bar) |
 
-Sidebar platform mengikuti struktur `/platform` asli: **Platform** (Dashboard, Browse Template), **My Resume** (daftar resume), **Other** (Home, Reset All Data).
+Platform sidebar follows the original `/platform` structure: **Platform** (Dashboard, Browse Template), **My Resume** (resume list), **Other** (Home, Reset All Data).
 
-## 🚀 Menjalankan
+## 🚀 Running
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173 (otomatis pindah port jika dipakai)
-npm run build    # output ke dist/
-npm run preview  # pratinjau hasil build production
-npm test         # unit test (Vitest) untuk generator teks & ATS readback
+npm run dev      # http://localhost:5173 (auto-port if taken)
+npm run build    # output to dist/
+npm run preview  # preview production build
+npm test         # unit tests (Vitest) for text generator & ATS readback
 npm run test:watch
 ```
 
-## 📁 Struktur Proyek
+## 📁 Project Structure
 
 ```
 src/
 ├── main.jsx                    # Entry point React
-├── App.jsx                     # Hash router + library + halaman
+├── App.jsx                     # Hash router + library + pages
 ├── router.jsx                  # Mini hash router (useHashRoute, navigate, Link)
 ├── data/
-│   ├── schema.js               # Skema data resume + normalisasi
-│   └── sampleResume.js         # Data contoh (kunjungan pertama)
+│   ├── schema.js               # Resume data schema + fonts + normalization
+│   └── sampleResume.js         # Sample data (first visit)
 ├── hooks/
 │   ├── useResumeLibrary.js     # Library multi-resume + autosave localStorage
-│   └── useResumeEditor.js      # State editing per-resume (API action lengkap)
+│   └── useResumeEditor.js      # Per-resume editing state (full action API)
 ├── utils/
 │   ├── exporters.js            # TXT/PDF/DOCX/HTML/MD/JSON (dependency-free)
-│   ├── zip.js                  # ZIP writer minimal (CRC-32, store) untuk .docx
-│   ├── docx.js                 # Builder Office Open XML (WordprocessingML)
-│   ├── pdf.js                  # Generator PDF langsung (Helvetica + WinAnsi)
-│   ├── markdown.js             # Generator Markdown export (.md)
-│   ├── text.js                 # Generator plain text + ATS readback
-│   ├── text.test.js            # Unit test (Vitest)
-│   └── color.js                # Helper tint warna aksen
+│   ├── zip.js                  # Minimal ZIP writer (CRC-32, store method) for .docx
+│   ├── docx.js                 # Office Open XML builder (WordprocessingML)
+│   ├── pdf.js                  # Native PDF generator (Helvetica + WinAnsi)
+│   ├── markdown.js             # Markdown generator
+│   ├── text.js                 # ATS text generation + readiness checklist
+│   ├── text.test.js            # Unit tests (Vitest)
+│   └── color.js                # Accent color tint helper
 ├── styles/
-│   ├── global.css              # Tema gelap: landing + platform + builder
-│   └── resume-templates.css    # Kertas resume: tpl-modern/classic/minimal + print
+│   ├── global.css              # App layout, builder, ribbon, responsive
+│   └── resume-templates.css    # Resume paper styling (print + screen)
 └── components/
     ├── landing/                # Landing, Nav, Hero, Features, HowItWorks, TemplateGallery, Footer
-    ├── platform/               # PlatformLayout (sidebar), Dashboard, TemplatesPage
-    └── builder/                # BuilderPage, EditorTabs, tab panels, EntryCard (drag & drop),
-                                # ResumePaper, ResumePreview, AtsReadback, AtsChecklist, Toast
+    ├── platform/               # PlatformLayout (sidebar), Dashboard, TemplatesPage, ResumeMoreMenu
+    └── builder/                # BuilderPage, EditorTabs, ScrollStrip, tab panels, EntryCard (drag & drop + move buttons),
+                                # ResumePaper, ResumePreview (ribbon toolbar), AtsReadback, AtsChecklist
 ```
 
 ## 💾 Data Format (JSON)
@@ -124,13 +124,13 @@ Accent color applied via inline style (HTML), `w:color` WordprocessingML (DOCX),
 
 ## 🌍 Deploy
 
-Build bersifat portabel (`base: './'`), jadi `dist/` bisa di-host di mana saja:
+Build is portable (`base: './'`), so `dist/` can be hosted anywhere:
 
-- **Netlify / Vercel** — drag & drop folder `dist/`, atau hubungkan repo (build command `npm run build`, publish dir `dist`)
-- **GitHub Pages** — deploy isi `dist/` ke branch `gh-pages`
-- **File system** — karena base relatif, `dist/index.html` bahkan bisa dibuka langsung dari disk
+- **Netlify / Vercel** — drag & drop the `dist/` folder, or connect the repo (build command `npm run build`, publish dir `dist`)
+- **GitHub Pages** — deploy the contents of `dist/` to the `gh-pages` branch
+- **File system** — because the base is relative, `dist/index.html` can even be opened directly from disk
 
-Contoh workflow GitHub Actions (`.github/workflows/deploy.yml`):
+Example GitHub Actions workflow (`.github/workflows/deploy.yml`):
 
 ```yaml
 name: Deploy
