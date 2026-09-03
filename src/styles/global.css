@@ -1971,3 +1971,155 @@ footer a:hover {
     border-color: var(--red);
     color: #fff;
 }
+/* ── RIBBON TOOLBAR (Word/Excel-style tabs for the Live Preview) ── */
+.ribbon {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: visible;
+}
+.ribbon-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 6px 8px 0;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border2);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.ribbon-tabs::-webkit-scrollbar { display: none; }
+.ribbon-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.ribbon-tab:hover { color: var(--text); background: var(--surface3); }
+.ribbon-tab.active {
+  color: var(--accent2);
+  border-bottom-color: var(--accent);
+  background: var(--accent-dim);
+}
+.ribbon-body {
+  display: flex;
+  align-items: center;
+  min-height: 76px;
+  padding: 8px 12px;
+  overflow: visible;
+}
+.ribbon-groups { display: flex; align-items: center; }
+.ribbon-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border-right: 1px solid var(--border);
+}
+.ribbon-group:last-child { border-right: none; }
+.ribbon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 76px;
+  min-width: 76px;
+  padding: 6px 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.05;
+  text-align: center;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.15s;
+}
+.ribbon-btn .icon { width: 20px; height: 20px; }
+.ribbon-btn:hover { background: var(--surface3); border-color: var(--border2); color: var(--text); }
+.ribbon-btn.active {
+  color: var(--accent2);
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.ribbon-btn.toggle-on {
+  color: var(--accent2);
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.ribbon-btn.danger:hover {
+  color: var(--red);
+  background: rgba(240, 78, 78, 0.1);
+  border-color: var(--red);
+}
+.ribbon-btn.active .em-chevron { transform: rotate(180deg); }
+.ribbon-btn .em-chevron { opacity: 0.85; }
+.ribbon-accent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+}
+.ribbon-accent-label { font-size: 10.5px; color: var(--text3); font-weight: 600; }
+.ribbon-accent-row { display: flex; align-items: center; gap: 6px; }
+.ribbon-mini-btn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ribbon-mini-btn:hover { color: var(--accent2); border-color: var(--accent); }
+/* Collapse/expand toggle at the right end of the tab strip */
+.ribbon-collapse-btn {
+  margin-left: auto;
+  margin-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ribbon-collapse-btn:hover { color: var(--text); background: var(--surface3); }
+.ribbon-collapse-btn .icon { transition: transform 0.15s; transform: rotate(180deg); }
+.ribbon.collapsed .ribbon-collapse-btn .icon { transform: none; }
+/* Export dropdown overlays the preview card below the ribbon — anchored to
+   the ribbon (position: relative) so `.ribbon-body` (overflow: visible) never
+   clips it and it does not render "inside" the card view. */
+.ribbon .export-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 8px;
+  left: auto;
+  z-index: 80;
+  margin-top: 0;
+}

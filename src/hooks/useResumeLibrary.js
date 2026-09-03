@@ -24,7 +24,7 @@ function readResumesFromKey(key) {
       .filter((r) => r && typeof r === 'object' && r.id && r.data)
       .map((r) => ({
         id: String(r.id),
-        title: String(r.title || 'Untitled Resume'),
+        title: String(r.title || ''),
         createdAt: Number(r.createdAt) || Date.now(),
         updatedAt: Number(r.updatedAt) || Date.now(),
         data: normalizeResume(r.data),
@@ -104,7 +104,7 @@ export function useResumeLibrary() {
     setLibrary((lib) => ({
       resumes: lib.resumes.map((r) =>
         r.id === id
-          ? { ...r, title: title || 'Untitled Resume', updatedAt: Date.now() }
+          ? { ...r, title, updatedAt: Date.now() }
           : r
       ),
     }));

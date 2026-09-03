@@ -14,9 +14,9 @@ import {
 import Icon from '../Icon.jsx';
 
 const TEMPLATES = [
-  { id: 'modern', label: 'M', title: 'Modern' },
-  { id: 'classic', label: 'C', title: 'Classic' },
-  { id: 'minimal', label: 'N', title: 'Minimal' },
+  { id: 'modern', title: 'Modern' },
+  { id: 'classic', title: 'Classic' },
+  { id: 'minimal', title: 'Minimal' },
 ];
 
 export default function ResumePreview({
@@ -36,6 +36,8 @@ export default function ResumePreview({
   const [showChecklist, setShowChecklist] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [fullPreview, setFullPreview] = useState(false);
+  const [ribbonTab, setRibbonTab] = useState('edit');
+  const [ribbonCollapsed, setRibbonCollapsed] = useState(false);
 
   // Close the export menu on outside click or Escape.
   useEffect(() => {
@@ -79,6 +81,18 @@ export default function ResumePreview({
     }
   };
 
+  // Ribbon tabs: clicking the active tab collapses/expands the ribbon body.
+  // Switching tabs (or re-clicking) always closes the export dropdown.
+  const handleTabClick = (tab) => {
+    setExportOpen(false);
+    if (ribbonTab === tab) {
+      setRibbonCollapsed((v) => !v);
+    } else {
+      setRibbonTab(tab);
+      setRibbonCollapsed(false);
+    }
+  };
+
   return (
     <div className="preview-area">
       {/* Title + auto-saved status (moved down into the Live Preview section) */}
@@ -96,57 +110,169 @@ export default function ResumePreview({
         </span>
       </div>
 
-      <div className="preview-toolbar">
-        <div className="preview-toolbar-left">
-          <span className="preview-label">Live Preview</span>
-        </div>
-        <div className="template-selector">
-          <label>Template:</label>
-          {TEMPLATES.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              title={t.title}
-              className={`tpl-btn${data.template === t.id ? ' active' : ''}`}
-              onClick={() => actions.setTemplate(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
-          <label className="accent-label">Accent:</label>
-          <input
-            type="color"
-            className="accent-input"
-            title="Accent color"
-            value={data.accent || '#7c5cfc'}
-            onChange={(e) => actions.setAccent(e.target.value)}
-          />
+      {/* Ribbon-style toolbar (Word/Excel-like tabs) */}
+      <div className={`ribbon${ribbonCollapsed ? ' collapsed' : ''}`} ref={exportRef}>
+        <div className="ribbon-tabs">
           <button
             type="button"
-            className="tpl-btn"
-            title="Reset accent color"
-            onClick={() => actions.setAccent('')}
+            className={`ribbon-tab${ribbonTab === 'edit' ? ' active' : ''}`}
+            onClick={() => handleTabClick('edit')}
           >
-            <Icon name="rotate-ccw" size={14} />
+            <Icon name="pencil" size={13} />
+            Edit
+          </button>
+          <button
+            type="button"
+            className={`ribbon-tab${ribbonTab === 'check' ? ' active' : ''}`}
+            onClick={() => handleTabClick('check')}
+          >
+            <Icon name="eye" size={13} />
+            Check
+          </button>
+          <button
+            type="button"
+            className={`ribbon-tab${ribbonTab === 'template' ? ' active' : ''}`}
+            onClick={() => handleTabClick('template')}
+          >
+            <Icon name="layout-template" size={13} />
+            Template
+          </button>
+          <button
+            type="button"
+            className={`ribbon-tab${ribbonTab === 'export' ? ' active' : ''}`}
+            onClick={() => handleTabClick('export')}
+          >
+            <Icon name="download" size={13} />
+            Export / Import
+          </button>
+          <button
+            type="button"
+            className="ribbon-collapse-btn"
+            title={ribbonCollapsed ? 'Expand ribbon' : 'Collapse ribbon'}
+            aria-expanded={!ribbonCollapsed}
+            onClick={() => setRibbonCollapsed((v) => !v)}
+          >
+            <Icon name="chevron-down" size={14} />
           </button>
         </div>
-      </div>
 
-      <div className="export-bar">
-        <div className="export-menu" ref={exportRef}>
-          <button
-            type="button"
-            className={`export-menu-btn${exportOpen ? ' open' : ''}`}
-            aria-haspopup="menu"
-            aria-expanded={exportOpen}
-            onClick={() => setExportOpen((v) => !v)}
-          >
-            <Icon name="download" size={14} />
-            Export
-            <Icon name="chevron-down" size={14} className="em-chevron" />
-          </button>
-          {exportOpen && (
-            <div className="export-menu-dropdown" role="menu">
+        {!ribbonCollapsed && (
+        <div className="ribbon-body">
+          {ribbonTab === 'edit' && (
+            <div className="ribbon-groups">
+              <div className="ribbon-group">
+                <button type="button" className="ribbon-btn" onClick={onClearAll}>
+                  <Icon name="eraser" size={18} />
+                  Clear Fields
+                </button>
+                <button type="button" className="ribbon-btn" onClick={onLoadSample}>
+                  <Icon name="sparkles" size={18} />
+                  Load Sample
+                </button>
+                <button
+                  type="button"
+                  className="ribbon-btn danger"
+                  title="Delete this resume"
+                  onClick={onDelete}
+                >
+                  <Icon name="trash-2" size={18} />
+                  Delete
+                </button>
+              </div>
+            </div>
+          )}
+
+          {ribbonTab === 'check' && (
+            <div className="ribbon-groups">
+              <div className="ribbon-group">
+                <button
+                  type="button"
+                  className={`ribbon-btn${showAts ? ' toggle-on' : ''}`}
+                  onClick={() => setShowAts((v) => !v)}
+                >
+                  <Icon name="eye" size={18} />
+                  ATS Readback
+                </button>
+                <button
+                  type="button"
+                  className={`ribbon-btn${showChecklist ? ' toggle-on' : ''}`}
+                  onClick={() => setShowChecklist((v) => !v)}
+                >
+                  <Icon name="target" size={18} />
+                  Readiness
+                </button>
+              </div>
+            </div>
+          )}
+
+          {ribbonTab === 'template' && (
+            <div className="ribbon-groups">
+              <div className="ribbon-group">
+                {TEMPLATES.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    title={`Use ${t.title} template`}
+                    className={`ribbon-btn${data.template === t.id ? ' active' : ''}`}
+                    onClick={() => actions.setTemplate(t.id)}
+                  >
+                    <Icon name="layout-template" size={18} />
+                    {t.title}
+                  </button>
+                ))}
+              </div>
+              <div className="ribbon-group">
+                <div className="ribbon-accent">
+                  <span className="ribbon-accent-label">Accent Color</span>
+                  <div className="ribbon-accent-row">
+                    <input
+                      type="color"
+                      className="accent-input"
+                      title="Accent color"
+                      value={data.accent || '#7c5cfc'}
+                      onChange={(e) => actions.setAccent(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="ribbon-mini-btn"
+                      title="Reset accent color"
+                      onClick={() => actions.setAccent('')}
+                    >
+                      <Icon name="rotate-ccw" size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        {ribbonTab === 'export' && (
+            <div className="ribbon-groups">
+              <div className="ribbon-group">
+                <button
+                  type="button"
+                  className={`ribbon-btn${exportOpen ? ' active' : ''}`}
+                  aria-haspopup="menu"
+                  aria-expanded={exportOpen}
+                  onClick={() => setExportOpen((v) => !v)}
+                >
+                  <Icon name="download" size={18} />
+                  Export
+                  <Icon name="chevron-down" size={10} className="em-chevron" />
+                </button>
+              </div>
+              <div className="ribbon-group">
+                <button type="button" className="ribbon-btn" onClick={onImportJson}>
+                  <Icon name="upload" size={18} />
+                  Import JSON
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        )}
+
+        {exportOpen && (
+              <div className="export-menu-dropdown ribbon-export-dropdown" role="menu">
               <button
                 type="button"
                 role="menuitem"
@@ -222,50 +348,8 @@ export default function ResumePreview({
                   <span className="em-hint">Data backup / transfer</span>
                 </span>
               </button>
-            </div>
-          )}
-        </div>
-        <button
-          type="button"
-          className={`export-btn${showAts ? ' toggle-on' : ''}`}
-          onClick={() => setShowAts((v) => !v)}
-        >
-          <Icon name="eye" size={14} />
-          ATS Readback
-        </button>
-        <button
-          type="button"
-          className={`export-btn${showChecklist ? ' toggle-on' : ''}`}
-          onClick={() => setShowChecklist((v) => !v)}
-        >
-          <Icon name="target" size={14} />
-          Readiness
-        </button>
-      </div>
-
-      {/* Resume actions (moved from the topbar into the Live Preview section) */}
-      <div className="preview-actions">
-        <button type="button" className="export-btn" onClick={onClearAll}>
-          <Icon name="eraser" size={13} />
-          Clear Fields
-        </button>
-        <button type="button" className="export-btn" onClick={onLoadSample}>
-          <Icon name="sparkles" size={13} />
-          Load Sample
-        </button>
-        <button type="button" className="export-btn" onClick={onImportJson}>
-          <Icon name="upload" size={13} />
-          Import JSON
-        </button>
-        <button
-          type="button"
-          className="export-btn danger"
-          title="Delete this resume"
-          onClick={onDelete}
-        >
-          <Icon name="trash-2" size={13} />
-          Delete
-        </button>
+                    </div>
+        )}
       </div>
 
       {/* Live thumbnail — card shape mirroring the template gallery (own class,
