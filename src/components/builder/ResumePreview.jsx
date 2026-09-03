@@ -133,19 +133,19 @@ export default function ResumePreview({
           </button>
           <button
             type="button"
-            className={`ribbon-tab${ribbonTab === 'check' ? ' active' : ''}`}
-            onClick={() => handleTabClick('check')}
-          >
-            <Icon name="eye" size={13} />
-            Check
-          </button>
-          <button
-            type="button"
             className={`ribbon-tab${ribbonTab === 'template' ? ' active' : ''}`}
             onClick={() => handleTabClick('template')}
           >
             <Icon name="layout-template" size={13} />
             Template
+          </button>
+          <button
+            type="button"
+            className={`ribbon-tab${ribbonTab === 'check' ? ' active' : ''}`}
+            onClick={() => handleTabClick('check')}
+          >
+            <Icon name="eye" size={13} />
+            Check
           </button>
           <button
             type="button"
