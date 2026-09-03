@@ -97,6 +97,9 @@ export default function App() {
         resumes={resumes}
         onNew={handleNew}
         onResetData={handleResetData}
+        onDuplicate={handleDuplicate}
+        onDelete={handleDelete}
+        showToast={showToast}
       >
         {route === '/dashboard' ? (
           <Dashboard
@@ -104,6 +107,7 @@ export default function App() {
             onNew={handleNew}
             onDuplicate={handleDuplicate}
             onDelete={handleDelete}
+            showToast={showToast}
           />
         ) : (
           <TemplatesPage onCreate={handleCreateFromTemplate} />
@@ -130,6 +134,9 @@ export default function App() {
           resumes={resumes}
           onNew={handleNew}
           onResetData={handleResetData}
+          onDuplicate={handleDuplicate}
+          onDelete={handleDelete}
+          showToast={showToast}
         >
           <div className="empty-state">
             <h3>Resume not found</h3>

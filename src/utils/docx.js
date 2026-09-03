@@ -7,6 +7,7 @@
 //  w:color so it survives the same way the preview shows it.
 // ─────────────────────────────────────────────────────────────
 import { createZip } from './zip.js';
+import { fontById } from '../data/schema.js';
 
 const DEFAULT_ACCENT = '7C5CFC';
 const TEXT_COLOR = '1A1A1A';
@@ -24,9 +25,10 @@ function esc(value) {
 // ── WordprocessingML fragments ────────────────────────────────
 
 // <w:r> — a text run. rPr children follow the CT_RPr schema order
-// (b → i → color → sz → szCs) so Word validates the part.
-function run(text, { bold = false, italic = false, size = 22, color = TEXT_COLOR } = {}) {
+// (rFonts → b → i → color → sz → szCs) so Word validates the part.
+function run(text, { bold = false, italic = false, size = 22, color = TEXT_COLOR, font = '' } = {}) {
   const rPr = [
+    font ? `<w:rFonts w:ascii="${font}" w:hAnsi="${font}" w:cs="${font}"/>` : '',
     bold ? '<w:b/>' : '',
     italic ? '<w:i/>' : '',
     `<w:color w:val="${color}"/>`,
@@ -57,22 +59,22 @@ function dateRange(start, end) {
 
 // ── Document body blocks ──────────────────────────────────────
 
-function headerBlock(state) {
+function headerBlock(state, font) {
   const parts = [
-    para(run(state.name || 'Your Name', { bold: true, size: 44, color: '111111' }), {
+    para(run(state.name || 'Your Name', { bold: true, size: 44, color: '111111', font }), {
       after: 40,
       align: 'center',
     }),
   ];
   if (state.title) {
     parts.push(
-      para(run(state.title, { size: 24, color: MUTED_COLOR }), { after: 40, align: 'center' })
+      para(run(state.title, { size: 24, color: MUTED_COLOR, font }), { after: 40, align: 'center' })
     );
   }
   const contact = [state.email, state.phone, state.location, state.linkedin].filter(Boolean);
   if (contact.length) {
     parts.push(
-      para(run(contact.join(' | '), { size: 20, color: MUTED_COLOR }), {
+      para(run(contact.join(' | '), { size: 20, color: MUTED_COLOR, font }), {
         after: 120,
         align: 'center',
       })
@@ -81,8 +83,8 @@ function headerBlock(state) {
   return parts.join('');
 }
 
-function sectionHeading(text, accent) {
-  return para(run(text, { bold: true, size: 24, color: accent }), {
+function sectionHeading(text, accent, font) {
+  return para(run(text, { bold: true, size: 24, color: accent, font }), {
     before: 240,
     after: 120,
     border: accent,
@@ -91,37 +93,37 @@ function sectionHeading(text, accent) {
 
 // Free-text lines: bullet-prefixed lines become indented bullet
 // paragraphs, everything else stays as plain body paragraphs.
-function descParagraphs(desc) {
+function descParagraphs(desc, font) {
   return (desc || '')
     .split('\n')
     .map((l) => l.trim())
     .filter(Boolean)
     .map((line) =>
       isBulletLine(line)
-        ? para(run(`• ${stripBullet(line)}`), { after: 40, indent: 240 })
-        : para(run(line), { after: 40 })
+        ? para(run(`• ${stripBullet(line)}`, { font }), { after: 40, indent: 240 })
+        : para(run(line, { font }), { after: 40 })
     )
     .join('');
 }
 
-function entryBlock(entries, accent, heading, titleOf, dateOf, descOf) {
+function entryBlock(entries, accent, heading, titleOf, dateOf, descOf, font) {
   if (!entries.length) return '';
-  const paras = [sectionHeading(heading, accent)];
+  const paras = [sectionHeading(heading, accent, font)];
   entries.forEach((e) => {
     paras.push(
-      para(run(titleOf(e).title, { bold: true }) + (titleOf(e).rest ? run(` | ${titleOf(e).rest}`) : ''), {
+      para(run(titleOf(e).title, { bold: true, font }) + (titleOf(e).rest ? run(` | ${titleOf(e).rest}`, { font }) : ''), {
         after: 20,
       })
     );
     const dates = dateOf(e);
-    if (dates) paras.push(para(run(dates, { italic: true, color: MUTED_COLOR }), { after: 40 }));
-    const desc = descParagraphs(descOf(e));
+    if (dates) paras.push(para(run(dates, { italic: true, color: MUTED_COLOR, font }), { after: 40 }));
+    const desc = descParagraphs(descOf(e), font);
     if (desc) paras.push(desc);
   });
   return paras.join('');
 }
 
-function skillsBlock(state, accent) {
+function skillsBlock(state, accent, font) {
   const groupedLines = state.skillsGrouped
     ? state.skillsGrouped.split('\n').map((l) => l.trim()).filter(Boolean)
     : [];
@@ -129,20 +131,20 @@ function skillsBlock(state, accent) {
     ? state.skills.split(',').map((x) => x.trim()).filter(Boolean)
     : [];
   if (!groupedLines.length && !flatSkills.length) return '';
-  const paras = [sectionHeading('SKILLS', accent)];
+  const paras = [sectionHeading('SKILLS', accent, font)];
   if (groupedLines.length) {
     groupedLines.forEach((line) => {
       const idx = line.indexOf(':');
       if (idx > 0) {
         paras.push(
-          para(run(line.slice(0, idx + 1), { bold: true }) + run(line.slice(idx + 1)), { after: 40 })
+          para(run(line.slice(0, idx + 1), { bold: true, font }) + run(line.slice(idx + 1), { font }), { after: 40 })
         );
       } else {
-        paras.push(para(run(line), { after: 40 }));
+        paras.push(para(run(line, { font }), { after: 40 }));
       }
     });
   } else {
-    paras.push(para(run(flatSkills.join(', ')), { after: 40 }));
+    paras.push(para(run(flatSkills.join(', '), { font }), { after: 40 }));
   }
   return paras.join('');
 }
@@ -192,10 +194,11 @@ function appPropsXml() {
 }
 
 function documentXml(state, accent) {
+  const font = fontById(state.font).name;
   const body = [
-    headerBlock(state),
+    headerBlock(state, font),
     state.summary
-      ? sectionHeading('PROFESSIONAL SUMMARY', accent) + para(run(state.summary), { after: 80 })
+      ? sectionHeading('PROFESSIONAL SUMMARY', accent, font) + para(run(state.summary, { font }), { after: 80 })
       : '',
     entryBlock(
       (state.experience || []).filter((e) => e.title || e.company),
@@ -203,7 +206,8 @@ function documentXml(state, accent) {
       'EXPERIENCE',
       (e) => ({ title: e.title || '', rest: e.company || '' }),
       (e) => dateRange(e.start, e.end),
-      (e) => e.desc
+      (e) => e.desc,
+      font
     ),
     entryBlock(
       (state.education || []).filter((e) => e.degree || e.school),
@@ -211,7 +215,8 @@ function documentXml(state, accent) {
       'EDUCATION',
       (e) => ({ title: e.degree || '', rest: e.school || '' }),
       (e) => dateRange(e.start, e.end),
-      (e) => e.desc
+      (e) => e.desc,
+      font
     ),
     entryBlock(
       (state.projects || []).filter((p) => p.name || p.link),
@@ -219,7 +224,8 @@ function documentXml(state, accent) {
       'PROJECTS',
       (p) => ({ title: p.name || '', rest: p.link || '' }),
       () => '',
-      (p) => p.desc
+      (p) => p.desc,
+      font
     ),
     entryBlock(
       (state.certifications || []).filter((c) => c.name || c.issuer),
@@ -227,7 +233,8 @@ function documentXml(state, accent) {
       'CERTIFICATIONS',
       (c) => ({ title: c.name || '', rest: [c.issuer, c.year].filter(Boolean).join(' | ') }),
       () => '',
-      () => ''
+      () => '',
+      font
     ),
     entryBlock(
       (state.languages || []).filter((l) => l.name),
@@ -235,9 +242,10 @@ function documentXml(state, accent) {
       'LANGUAGES',
       (l) => ({ title: l.level ? `${l.name} — ${l.level}` : l.name, rest: '' }),
       () => '',
-      () => ''
+      () => '',
+      font
     ),
-    skillsBlock(state, accent),
+    skillsBlock(state, accent, font),
   ].join('');
   // US Letter page (12240 × 15840 twips) with 0.5" margins.
   return `${XML_DECL}

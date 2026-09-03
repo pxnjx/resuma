@@ -7,6 +7,7 @@ import CertificationsTab from './CertificationsTab.jsx';
 import LanguagesTab from './LanguagesTab.jsx';
 import SkillsTab from './SkillsTab.jsx';
 import SummaryTab from './SummaryTab.jsx';
+import ScrollStrip from './ScrollStrip.jsx';
 
 const TABS = [
   { id: 'profile', label: 'Profile' },
@@ -35,7 +36,7 @@ export default function EditorTabs({ data, actions }) {
 
   return (
     <div className="editor-sidebar">
-      <div className="editor-tabs">
+      <ScrollStrip className="editor-tabs">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -46,7 +47,7 @@ export default function EditorTabs({ data, actions }) {
             {t.label}
           </button>
         ))}
-      </div>
+      </ScrollStrip>
       {TABS.map((t) => {
         const Panel = PANELS[t.id];
         return (

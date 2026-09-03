@@ -1,5 +1,14 @@
 import { forwardRef } from 'react';
 import { tintHex } from '../../utils/color.js';
+import { fontById } from '../../data/schema.js';
+import Icon from '../Icon.jsx';
+
+const CONTACT_FIELDS = [
+  { key: 'email', icon: 'mail' },
+  { key: 'phone', icon: 'phone' },
+  { key: 'location', icon: 'map-point' },
+  { key: 'linkedin', icon: 'link' },
+];
 
 function parseSkills(s) {
   const groupedLines = s.skillsGrouped
@@ -51,7 +60,10 @@ function Section({ title, titleStyle, children }) {
 // variables — so it survives PDF / DOCX / HTML exports.
 const ResumePaper = forwardRef(function ResumePaper({ data, template, mini = false }, ref) {
   const s = data || {};
-  const contact = [s.email, s.phone, s.location, s.linkedin].filter(Boolean);
+  const contact = CONTACT_FIELDS.filter((f) => s[f.key]).map((f) => ({
+    icon: f.icon,
+    text: s[f.key],
+  }));
   const experience = (s.experience || []).filter((e) => e.title || e.company);
   const education = (s.education || []).filter((e) => e.degree || e.school);
   const projects = (s.projects || []).filter((e) => e.name || e.link);
@@ -70,6 +82,8 @@ const ResumePaper = forwardRef(function ResumePaper({ data, template, mini = fal
 
   const accent =
     typeof s.accent === 'string' && /^#[0-9a-fA-F]{6}$/.test(s.accent) ? s.accent : '';
+  const fontDef = fontById(s.font);
+  const fontStyle = { fontFamily: fontDef.css };
   const soft = accent ? tintHex(accent, 0.9) : '';
   const titleStyle = accent ? { borderBottomColor: accent } : undefined;
   const tagStyle = () => {
@@ -80,14 +94,21 @@ const ResumePaper = forwardRef(function ResumePaper({ data, template, mini = fal
   };
 
   return (
-    <div ref={ref} className={`resume-paper tpl-${template}${mini ? ' paper-mini' : ''}`}>
+    <div
+      ref={ref}
+      className={`resume-paper tpl-${template}${mini ? ' paper-mini' : ''}`}
+      style={fontStyle}
+    >
       <h1 className="resume-name">{s.name || 'Your Name'}</h1>
       {s.title ? <div className="resume-tagline">{s.title}</div> : null}
 
       {contact.length > 0 && (
         <div className="contact-row">
-          {contact.map((part, i) => (
-            <span className="contact-item" key={i}>{part}</span>
+          {contact.map((item, i) => (
+            <span className="contact-item" key={i}>
+              {!mini && <Icon name={item.icon} size={12} className="contact-icon" />}
+              {item.text}
+            </span>
           ))}
         </div>
       )}

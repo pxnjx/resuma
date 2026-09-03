@@ -1594,7 +1594,8 @@ footer a:hover {
    own class so it never conflicts with dashboard (.resume-card) styles ── */
 
 .builder-preview-card {
-    height: 300px;
+    position: relative;
+    height: auto;
     max-width: 320px;
     margin: 0 auto;
     background: #fff;
@@ -1614,6 +1615,49 @@ footer a:hover {
 .builder-preview-card:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+
+/* Overlay hint: icon + label shown on hover / keyboard focus */
+
+.builder-preview-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(14, 14, 16, 0.6);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    letter-spacing: 0.3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.builder-preview-overlay .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.builder-preview-card:hover .builder-preview-overlay,
+.builder-preview-card:focus-visible .builder-preview-overlay {
+    opacity: 1;
+}
+
+
+/* Touch devices have no hover — keep a subtle persistent hint */
+
+@media (hover: none) {
+    .builder-preview-overlay {
+        opacity: 1;
+        background: rgba(14, 14, 16, 0.35);
+    }
 }
 
 
@@ -1971,155 +2015,391 @@ footer a:hover {
     border-color: var(--red);
     color: #fff;
 }
+
+
 /* ── RIBBON TOOLBAR (Word/Excel-style tabs for the Live Preview) ── */
+
 .ribbon {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  overflow: visible;
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: visible;
 }
+
 .ribbon-tabs {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  padding: 6px 8px 0;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border2);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    padding: 6px 8px 0;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border2);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
-.ribbon-tabs::-webkit-scrollbar { display: none; }
+
+.ribbon-tabs::-webkit-scrollbar {
+    display: none;
+}
+
 .ribbon-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border: none;
-  background: transparent;
-  color: var(--text2);
-  font-size: 12px;
-  font-weight: 700;
-  font-family: var(--font);
-  cursor: pointer;
-  white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
 }
-.ribbon-tab:hover { color: var(--text); background: var(--surface3); }
+
+.ribbon-tab:hover {
+    color: var(--text);
+    background: var(--surface3);
+}
+
 .ribbon-tab.active {
-  color: var(--accent2);
-  border-bottom-color: var(--accent);
-  background: var(--accent-dim);
+    color: var(--accent2);
+    border-bottom-color: var(--accent);
+    background: var(--accent-dim);
 }
+
 .ribbon-body {
-  display: flex;
-  align-items: center;
-  min-height: 76px;
-  padding: 8px 12px;
-  overflow: visible;
+    display: flex;
+    align-items: center;
+    min-height: 76px;
+    padding: 8px 12px;
+    overflow: visible;
 }
-.ribbon-groups { display: flex; align-items: center; }
+
+.ribbon-groups {
+    display: flex;
+    align-items: center;
+}
+
 .ribbon-group {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 12px;
-  border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border-right: 1px solid var(--border);
 }
-.ribbon-group:last-child { border-right: none; }
+
+.ribbon-group:last-child {
+    border-right: none;
+}
+
 .ribbon-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 76px;
-  min-width: 76px;
-  padding: 6px 4px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  color: var(--text2);
-  font-size: 10.5px;
-  font-weight: 600;
-  line-height: 1.05;
-  text-align: center;
-  cursor: pointer;
-  font-family: var(--font);
-  transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 76px;
+    min-width: 76px;
+    padding: 6px 4px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.05;
+    text-align: center;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.15s;
 }
-.ribbon-btn .icon { width: 20px; height: 20px; }
-.ribbon-btn:hover { background: var(--surface3); border-color: var(--border2); color: var(--text); }
+
+.ribbon-btn .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.ribbon-btn:hover {
+    background: var(--surface3);
+    border-color: var(--border2);
+    color: var(--text);
+}
+
 .ribbon-btn.active {
-  color: var(--accent2);
-  background: var(--accent-dim);
-  border-color: var(--accent);
+    color: var(--accent2);
+    background: var(--accent-dim);
+    border-color: var(--accent);
 }
+
 .ribbon-btn.toggle-on {
-  color: var(--accent2);
-  background: var(--accent-dim);
-  border-color: var(--accent);
+    color: var(--accent2);
+    background: var(--accent-dim);
+    border-color: var(--accent);
 }
+
 .ribbon-btn.danger:hover {
-  color: var(--red);
-  background: rgba(240, 78, 78, 0.1);
-  border-color: var(--red);
+    color: var(--red);
+    background: rgba(240, 78, 78, 0.1);
+    border-color: var(--red);
 }
-.ribbon-btn.active .em-chevron { transform: rotate(180deg); }
-.ribbon-btn .em-chevron { opacity: 0.85; }
+
+.ribbon-btn.active .em-chevron {
+    transform: rotate(180deg);
+}
+
+.ribbon-btn .em-chevron {
+    opacity: 0.85;
+}
+
 .ribbon-accent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
 }
-.ribbon-accent-label { font-size: 10.5px; color: var(--text3); font-weight: 600; }
-.ribbon-accent-row { display: flex; align-items: center; gap: 6px; }
+
+.ribbon-accent-label {
+    font-size: 10.5px;
+    color: var(--text3);
+    font-weight: 600;
+}
+
+.ribbon-accent-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Font dropdown in the Template ribbon group */
+.ribbon-font-label {
+    font-size: 10.5px;
+    color: var(--text3);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ribbon-select {
+    min-width: 132px;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 12px;
+    font-family: var(--font);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ribbon-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* ── SCROLL STRIP: < / > arrows at each end, shown on mobile ── */
+.scroll-strip {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.scroll-strip > div {
+    flex: 1;
+    min-width: 0;
+}
+.scroll-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.15s;
+}
+.scroll-arrow.left { left: 4px; }
+.scroll-arrow.right { right: 4px; }
+.scroll-arrow:hover { color: var(--accent2); border-color: var(--accent); }
+.scroll-arrow.hidden { opacity: 0; pointer-events: none; }
+@media (max-width: 900px) {
+    .scroll-arrow { display: inline-flex; }
+    .scroll-strip > .ribbon-tabs { padding-left: 26px; padding-right: 26px; }
+}
+
 .ribbon-mini-btn {
-  width: 26px;
-  height: 26px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.15s;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
 }
-.ribbon-mini-btn:hover { color: var(--accent2); border-color: var(--accent); }
+
+.ribbon-mini-btn:hover {
+    color: var(--accent2);
+    border-color: var(--accent);
+}
+
+/* ── RESUME MORE MENU (⋮ on sidebar rows & dashboard cards) ── */
+.resume-more {
+    position: relative;
+    display: inline-flex;
+}
+.resume-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex: none;
+}
+.resume-more-btn:hover { color: var(--text); background: var(--surface3); }
+.resume-more-menu {
+    position: fixed;
+    width: 200px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 500;
+    animation: resume-more-pop 0.12s ease;
+}
+@keyframes resume-more-pop {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: none; }
+}
+.resume-more-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.15s;
+}
+.resume-more-item:hover { background: var(--accent-dim); }
+.resume-more-item .icon { color: var(--accent2); flex: none; }
+.resume-more-item.danger { color: var(--red); }
+.resume-more-item.danger .icon { color: var(--red); }
+.resume-more-item.danger:hover { background: rgba(240, 78, 78, 0.1); }
+.resume-more-item.back { color: var(--text2); font-weight: 600; }
+.resume-more-sep { height: 1px; background: var(--border); margin: 4px 6px; }
+.resume-more-arrow { margin-left: auto; color: var(--text3); }
+/* Sidebar row: link takes remaining width, ⋮ button beside it */
+.side-resume-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-right: 6px;
+}
+.side-resume-row .side-link { flex: 1; min-width: 0; }
+/* Dashboard card: single ⋮ button, right-aligned */
+.resume-card-actions { justify-content: flex-end; }
+
+/* Dashboard card info: 2-col layout —
+   row 1: title | ⋮ actions   ·   row 2: meta (spans both) */
+.resume-card-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 4px;
+}
+.resume-card-title {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+}
+.resume-card-actions {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+}
+.resume-card-meta {
+    grid-column: 1 / -1;
+    grid-row: 2;
+}
+
+
 /* Collapse/expand toggle at the right end of the tab strip */
+
 .ribbon-collapse-btn {
-  margin-left: auto;
-  margin-bottom: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: none;
-  background: transparent;
-  color: var(--text3);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.15s;
+    margin-left: auto;
+    margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
 }
-.ribbon-collapse-btn:hover { color: var(--text); background: var(--surface3); }
-.ribbon-collapse-btn .icon { transition: transform 0.15s; transform: rotate(180deg); }
-.ribbon.collapsed .ribbon-collapse-btn .icon { transform: none; }
+
+.ribbon-collapse-btn:hover {
+    color: var(--text);
+    background: var(--surface3);
+}
+
+.ribbon-collapse-btn .icon {
+    transition: transform 0.15s;
+    transform: rotate(180deg);
+}
+
+.ribbon.collapsed .ribbon-collapse-btn .icon {
+    transform: none;
+}
+
+
 /* Export dropdown overlays the preview card below the ribbon — anchored to
    the ribbon (position: relative) so `.ribbon-body` (overflow: visible) never
    clips it and it does not render "inside" the card view. */
+
 .ribbon .export-menu-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 8px;
-  left: auto;
-  z-index: 80;
-  margin-top: 0;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 8px;
+    left: auto;
+    z-index: 80;
+    margin-top: 0;
 }

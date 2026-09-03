@@ -19,7 +19,16 @@ const TEXT_COLOR = '0.102 0.102 0.102'; // #1a1a1a
 const DARK_COLOR = '0.067 0.067 0.067'; // #111111
 const MUTED_COLOR = '0.333 0.333 0.333'; // #555555
 
+import { fontById } from '../data/schema.js';
+
 const FONT_KEYS = { regular: 'F1', bold: 'F2', italic: 'F3' };
+
+// Chosen open-source font → 14 standard PDF fonts (no embedding needed).
+// sans fonts map to the Helvetica family, serif fonts to the Times family.
+const PDF_BASE_FONTS = {
+  sans: { regular: 'Helvetica', bold: 'Helvetica-Bold', italic: 'Helvetica-Oblique' },
+  serif: { regular: 'Times-Roman', bold: 'Times-Bold', italic: 'Times-Italic' },
+};
 
 // AFM character widths (units/1000) for char codes 32–126.
 const HELV_REGULAR = [
@@ -324,6 +333,7 @@ export function buildPdf(state) {
   const accent = hexToRgb(accentHex);
   const pageContents = layout(state, accent);
   const pageCount = pageContents.length;
+  const baseFonts = PDF_BASE_FONTS[fontById(state.font).category] || PDF_BASE_FONTS.sans;
 
   // Object numbering: 1 catalog, 2 pages tree, then per page a
   // page object + content stream object, then the 3 fonts.
@@ -341,9 +351,9 @@ export function buildPdf(state) {
     // the same resume produces byte-identical, timestamp-free PDFs.
     objects.push(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
   });
-  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
-  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
-  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>');
+  objects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /${baseFonts.regular} /Encoding /WinAnsiEncoding >>`);
+  objects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /${baseFonts.bold} /Encoding /WinAnsiEncoding >>`);
+  objects.push(`<< /Type /Font /Subtype /Type1 /BaseFont /${baseFonts.italic} /Encoding /WinAnsiEncoding >>`);
 
   let out = '%PDF-1.4\n%\u00E2\u00E3\u00CF\u00D3\n';
   const offsets = [];

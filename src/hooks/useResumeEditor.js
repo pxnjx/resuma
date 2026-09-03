@@ -96,6 +96,7 @@ export function useResumeEditor(resume, onChange) {
     (accent) => commit((s) => ({ ...s, accent: accent || '' })),
     [commit]
   );
+  const setFont = useCallback((font) => commit((s) => ({ ...s, font })), [commit]);
   const clearAll = useCallback(() => commit(normalizeResume({})), [commit]);
   const loadSample = useCallback(() => commit(normalizeResume(sampleResume)), [commit]);
   const importState = useCallback((raw) => commit(normalizeResume(raw)), [commit]);
@@ -126,6 +127,7 @@ export function useResumeEditor(resume, onChange) {
       moveLanguage: (f, t) => moveInList('languages', f, t),
       setTemplate,
       setAccent,
+      setFont,
       clearAll,
       loadSample,
       importState,

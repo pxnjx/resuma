@@ -30,6 +30,22 @@
 .resume-paper .skill-group .skill-tag,
 .resume-paper .skills-grouped .skill-tag { margin: 1px 4px 1px 0; display: inline-block; }
 
+/* Contact items: icon + text, aligned per item. These styles are part of
+   this file (imported raw by the HTML exporter) so exported HTML keeps
+   the same look as the on-screen preview. */
+.resume-paper .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.resume-paper .contact-item .contact-icon {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    opacity: 0.85;
+}
+
 /* ── TEMPLATE: MODERN ── */
 .resume-paper.tpl-modern .resume-name { font-size: 22pt; font-weight: 800; color: #1a1a1a; letter-spacing: -0.5px; margin-bottom: 2px; }
 .resume-paper.tpl-modern .resume-tagline { font-size: 10pt; color: #6b7280; margin-bottom: 14px; }

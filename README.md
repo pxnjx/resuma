@@ -1,23 +1,28 @@
 # Resuma — Free, Local-First ATS Resume Builder
 
-**Land The Interview, Not The Reject Pile.** Resuma adalah resume builder ATS (Applicant Tracking System) yang *local-first*: seluruh data tersimpan di browser Anda (localStorage), tanpa akun, tanpa upload ke server.
+**Build ATS-friendly resumes in your browser.** Resuma is a local-first ATS (Applicant Tracking System) resume builder: all data stays in your browser (localStorage), no account, no uploads to any server.
 
-Dibangun ulang dari prototype single-file `ats.html` (terinspirasi oleh [lanjut.rimzzlabs.com](https://lanjut.rimzzlabs.com/)) menggunakan **React 18 + Vite** (JavaScript/JSX), tanpa dependency runtime tambahan.
+Built from scratch with **React 18 + Vite** (JavaScript/JSX), zero runtime dependencies.
 
-## ✨ Fitur
+## ✨ Features
 
-- **Landing page** — hero, 6 feature cards, 3 langkah "How it works", gallery template dengan mini preview *live* — klik kartu template → langsung buat resume & masuk builder
-- **Fine-grained editor** — 8 tab: Profile, Experience, Education, Projects, Certificates, Languages, Skills (flat & grouped), Summary
-- **Drag & drop reorder** — susun ulang urutan entri lewat handle ⠿ di tiap kartu
-- **Accent color picker** — warna aksen kustom untuk judul section & skill chips (ikut ter-export ke PDF/DOCX/HTML via inline style / WordprocessingML)
-- **Real-time preview** — kertas resume ter-update saat mengetik
-- **3 template** — Modern, Classic, Minimal (hanya mengubah tipografi/spacing/aksen; struktur ATS-safe tetap)
-- **6 format export** — `.TXT`, `.PDF`, `.DOCX` (Office Open XML asli), `.MD`, `.HTML`, `.JSON` (semua dependency-free)
-- **Import JSON** — pindahkan data antar browser/perangkat
-- **ATS Readback** — simulasi apa yang dibaca parser ATS, urutan baca tetap utuh
-- **ATS Readiness meter** — checklist kelengkapan 8 bagian esensial resume
-- **Auto-save** — setiap perubahan tersimpan otomatis ke localStorage
-- **Multi-resume library** — simpan banyak resume, kelola dari Dashboard
+- **Landing page** — hero, feature cards, 3-step "How it works", template gallery with live mini preview — click a template card to start building
+- **Structured editor** — 8 tabs: Profile, Experience, Education, Projects, Certificates, Languages, Skills (flat & grouped), Summary
+- **Drag & drop reorder** — rearrange entries via ⠿ handle on each card
+- **Move up/down buttons** — arrow buttons on each entry for easy reordering on mobile
+- **Accent color picker** — custom accent color for section headings & skill chips (exported to PDF/DOCX/HTML)
+- **Font selector** — 9 open-source font families (Inter, Poppins, Roboto, Open Sans, Lato, Source Sans 3, IBM Plex Sans, Merriweather, Lora)
+- **Real-time preview** — resume paper updates as you type
+- **Full preview modal** — click the preview thumbnail to view the full resume
+- **3 templates** — Modern, Classic, Minimal (typography/spacing/accent only; ATS-safe structure preserved)
+- **6 export formats** — `.TXT`, `.PDF` (native PDF), `.DOCX` (Office Open XML), `.MD`, `.HTML`, `.JSON` (all dependency-free)
+- **Import JSON** — transfer data between browsers/devices
+- **ATS Readback** — simulate what an ATS parser reads, reading order preserved
+- **ATS Readiness meter** — checklist for 8 essential resume sections
+- **Auto-save** — every change saved automatically to localStorage
+- **Multi-resume library** — store multiple resumes, manage from Dashboard
+- **Responsive design** — mobile-friendly with collapsible sidebar drawer, scrollable tabs, and touch-optimized ribbon interface
+- **SEO optimized** — Open Graph, Twitter Cards, Schema.org structured data, favicon
 
 ## 🗺 Halaman (Hash Routing)
 
@@ -75,9 +80,9 @@ src/
                                 # ResumePaper, ResumePreview, AtsReadback, AtsChecklist, Toast
 ```
 
-## 💾 Format Data (JSON)
+## 💾 Data Format (JSON)
 
-Resume tersimpan sebagai **library multi-resume** di `localStorage` dengan key `resuma_resume_library_v1`:
+Resumes stored as **multi-resume library** in `localStorage` with key `resuma_resume_library_v1`:
 
 ```json
 {
@@ -97,24 +102,25 @@ Resume tersimpan sebagai **library multi-resume** di `localStorage` dengan key `
         "certifications": [{ "name": "", "issuer": "", "year": "" }],
         "languages": [{ "name": "", "level": "" }],
         "template": "modern",
-        "accent": "#7c5cfc"
+        "accent": "#7c5cfc",
+        "font": "inter"
       }
     }
   ]
 }
 ```
 
-`Export JSON` menghasilkan data resume per-dokumen (isi field `data` di atas) dan tetap bisa di-import ke resume mana pun. Key lama (`lanjut_resume_library_v1` dan `lanjut_resume_state`) **dimigrasikan otomatis** saat pertama kali dibuka, lalu dibersihkan.
+`Export JSON` produces per-document data and can be imported into any resume. Legacy keys are **auto-migrated** on first load.
 
-## 🖨 Catatan Export
+## 🖨 Export Notes
 
-- **PDF** — dikonversi langsung menjadi file PDF asli oleh generator internal (`pdf.js`, dependency-free): tanpa dialog print dan tanpa header/timestamp bawaan browser, hasilnya identik di setiap export
-- **DOCX** — dokumen Office Open XML asli (paket ZIP berisi WordprocessingML, dibangun dependency-free lewat `zip.js` + `docx.js`); terbuka di Microsoft Word, LibreOffice, dan Google Docs tanpa peringatan format, dan mudah dibaca parser ATS
-- **MD** — Markdown dengan heading `#`/`##`/`###`, tanggal italic, dan bullet `- `; pas untuk README, portofolio, atau LLM-friendly output
-- **HTML** — file HTML mandiri; CSS print bawaan membuat `Ctrl+P` hanya mencetak kertas resume
-- **TXT** — plain text dengan header bagian; paling aman dibaca parser ATS
+- **PDF** — converted directly to native PDF by internal generator (`pdf.js`, dependency-free): no print dialog, no browser timestamp/header, identical output every time
+- **DOCX** — genuine Office Open XML (ZIP package with WordprocessingML, built dependency-free via `zip.js` + `docx.js`); opens in Microsoft Word, LibreOffice, Google Docs without format warnings, ATS-parser friendly
+- **MD** — Markdown with `#`/`##`/`###` headings, italic dates, `- ` bullets; ideal for README, portfolio, or LLM-friendly output
+- **HTML** — standalone file; built-in print CSS makes `Ctrl+P` print only the resume paper
+- **TXT** — plain text with section headers; safest for ATS parsers
 
-Warna aksen diterapkan lewat *inline style* pada HTML, via `w:color` WordprocessingML pada DOCX, dan via warna fill/stroke native pada PDF.
+Accent color applied via inline style (HTML), `w:color` WordprocessingML (DOCX), and native fill/stroke (PDF). Font family applied to all export formats.
 
 ## 🌍 Deploy
 

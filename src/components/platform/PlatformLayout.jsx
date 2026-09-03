@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link } from '../../router.jsx';
+import { Link, navigate } from '../../router.jsx';
 import Icon from '../Icon.jsx';
+import ResumeMoreMenu from './ResumeMoreMenu.jsx';
 
 // Platform shell (mirrors the original Lanjut /platform structure):
 // sidebar sections "Platform", "My Resume", and "Other".
-export default function PlatformLayout({ route, resumes, onNew, onResetData, children }) {
+export default function PlatformLayout({
+  route,
+  resumes,
+  onNew,
+  onResetData,
+  onDuplicate,
+  onDelete,
+  showToast,
+  children,
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Close the drawer whenever the route changes (e.g. after a nav click).
@@ -40,15 +50,23 @@ export default function PlatformLayout({ route, resumes, onNew, onResetData, chi
 
         <div className="side-section">My Resume</div>
         {resumes.map((r) => (
-          <Link
-            key={r.id}
-            to={'/builder/' + r.id}
-            className={`side-link side-resume${route === '/builder/' + r.id ? ' active' : ''}`}
-            title={r.title || 'Untitled Resume'}
-          >
-            <Icon name="file-text" size={15} />
-            <span className="side-label">{r.title || 'Untitled Resume'}</span>
-          </Link>
+          <div className="side-resume-row" key={r.id}>
+            <Link
+              to={'/builder/' + r.id}
+              className={`side-link side-resume${route === '/builder/' + r.id ? ' active' : ''}`}
+              title={r.title || 'Untitled Resume'}
+            >
+              <Icon name="file-text" size={15} />
+              <span className="side-label">{r.title || 'Untitled Resume'}</span>
+            </Link>
+            <ResumeMoreMenu
+              resume={r}
+              onEdit={() => navigate('/builder/' + r.id)}
+              onDuplicate={() => onDuplicate(r.id)}
+              onDelete={() => onDelete(r.id)}
+              showToast={showToast}
+            />
+          </div>
         ))}
         <button type="button" className="side-link side-new" onClick={onNew}>
           <Icon name="plus" size={15} />

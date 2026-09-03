@@ -11,7 +11,9 @@ import {
   exportPDF,
   exportTXT,
 } from '../../utils/exporters.js';
+import { FONTS } from '../../data/schema.js';
 import Icon from '../Icon.jsx';
+import ScrollStrip from './ScrollStrip.jsx';
 
 const TEMPLATES = [
   { id: 'modern', title: 'Modern' },
@@ -112,7 +114,7 @@ export default function ResumePreview({
 
       {/* Ribbon-style toolbar (Word/Excel-like tabs) */}
       <div className={`ribbon${ribbonCollapsed ? ' collapsed' : ''}`} ref={exportRef}>
-        <div className="ribbon-tabs">
+        <ScrollStrip className="ribbon-tabs">
           <button
             type="button"
             className={`ribbon-tab${ribbonTab === 'edit' ? ' active' : ''}`}
@@ -120,6 +122,14 @@ export default function ResumePreview({
           >
             <Icon name="pencil" size={13} />
             Edit
+          </button>
+          <button
+            type="button"
+            className={`ribbon-tab${ribbonTab === 'layout' ? ' active' : ''}`}
+            onClick={() => handleTabClick('layout')}
+          >
+            <Icon name="palette" size={13} />
+            Layout
           </button>
           <button
             type="button"
@@ -154,7 +164,7 @@ export default function ResumePreview({
           >
             <Icon name="chevron-down" size={14} />
           </button>
-        </div>
+        </ScrollStrip>
 
         {!ribbonCollapsed && (
         <div className="ribbon-body">
@@ -221,6 +231,11 @@ export default function ResumePreview({
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+
+          {ribbonTab === 'layout' && (
+            <div className="ribbon-groups">
               <div className="ribbon-group">
                 <div className="ribbon-accent">
                   <span className="ribbon-accent-label">Accent Color</span>
@@ -242,6 +257,19 @@ export default function ResumePreview({
                     </button>
                   </div>
                 </div>
+              </div>
+              <div className="ribbon-group">
+                <label className="ribbon-font-label" htmlFor="resume-font">Font</label>
+                <select
+                  id="resume-font"
+                  className="ribbon-select"
+                  value={data.font}
+                  onChange={(e) => actions.setFont(e.target.value)}
+                >
+                  {FONTS.map((f) => (
+                    <option key={f.id} value={f.id}>{f.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
           )}
@@ -370,6 +398,11 @@ export default function ResumePreview({
         }}
       >
         <ResumePaper data={data} template={data.template} mini />
+        {/* Hover/tap hint so users know the card is clickable */}
+        <div className="builder-preview-overlay" aria-hidden="true">
+          <Icon name="eye" size={22} />
+          <span>Click to preview</span>
+        </div>
       </div>
 
       {/* Off-screen full-size paper: markup source for the HTML export */}

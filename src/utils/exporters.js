@@ -10,6 +10,7 @@ import { generatePlainText } from './text.js';
 import { generateMarkdown } from './markdown.js';
 import { buildDocx } from './docx.js';
 import { buildPdf } from './pdf.js';
+import { fontById } from '../data/schema.js';
 
 export function downloadFile(content, filename, mime) {
   const blob = new Blob([content], { type: mime });
@@ -30,12 +31,15 @@ export function exportTXT(state) {
 // Build a standalone HTML document for printing (PDF) / HTML export.
 function buildPrintDocument(state, paperEl) {
   const title = state.name || 'Resume';
+  const fontDef = fontById(state.font);
+  const fontFam = fontDef.name.replace(/ /g, '+');
   return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>${title}</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=${fontFam}:wght@400;600;700&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { background:#ffffff; }
   ${resumeCss}

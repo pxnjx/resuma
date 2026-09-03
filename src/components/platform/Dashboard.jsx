@@ -1,6 +1,7 @@
-import { Link } from '../../router.jsx';
+import { Link, navigate } from '../../router.jsx';
 import Icon from '../Icon.jsx';
 import ResumePaper from '../builder/ResumePaper.jsx';
+import ResumeMoreMenu from './ResumeMoreMenu.jsx';
 
 function formatRelative(ts) {
   const diff = Date.now() - ts;
@@ -15,7 +16,7 @@ function formatRelative(ts) {
 }
 
 // Dashboard page — "My Resume" card grid with live previews.
-export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
+export default function Dashboard({ resumes, onNew, onDuplicate, onDelete, showToast }) {
   return (
     <div>
       <div className="dash-header">
@@ -54,22 +55,13 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete }) {
                   {formatRelative(r.updatedAt)}
                 </div>
                 <div className="resume-card-actions">
-                  <Link to={'/builder/' + r.id} className="mini-btn">
-                    <Icon name="pencil" size={12} />
-                    Edit
-                  </Link>
-                  <button type="button" className="mini-btn" onClick={() => onDuplicate(r.id)}>
-                    <Icon name="copy" size={12} />
-                    Duplicate
-                  </button>
-                  <button
-                    type="button"
-                    className="mini-btn danger"
-                    title="Delete resume"
-                    onClick={() => onDelete(r.id)}
-                  >
-                    <Icon name="trash-2" size={12} />
-                  </button>
+                  <ResumeMoreMenu
+                    resume={r}
+                    onEdit={() => navigate('/builder/' + r.id)}
+                    onDuplicate={() => onDuplicate(r.id)}
+                    onDelete={() => onDelete(r.id)}
+                    showToast={showToast}
+                  />
                 </div>
               </div>
             </div>
