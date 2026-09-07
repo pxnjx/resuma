@@ -7,6 +7,7 @@ import Dashboard from './components/platform/Dashboard.jsx';
 import TemplatesPage from './components/platform/TemplatesPage.jsx';
 import BuilderPage from './components/builder/BuilderPage.jsx';
 import Toast from './components/builder/Toast.jsx';
+import { useTheme } from './hooks/useTheme.js';
 
 export default function App() {
   const route = useHashRoute();
@@ -14,6 +15,7 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState(null);
   const [toastType, setToastType] = useState('success');
   const toastTimer = useRef(null);
+  const { theme, toggleTheme } = useTheme();
 
   const showToast = useCallback((message, type = 'success') => {
     setToastMessage(message);
@@ -89,7 +91,13 @@ export default function App() {
 
   let page;
   if (route === '/' || route === '') {
-    page = <Landing onCreateFromTemplate={handleCreateFromTemplate} />;
+    page = (
+      <Landing
+        onCreateFromTemplate={handleCreateFromTemplate}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
   } else if (route === '/dashboard' || route === '/templates') {
     page = (
       <PlatformLayout
@@ -108,6 +116,8 @@ export default function App() {
             onDuplicate={handleDuplicate}
             onDelete={handleDelete}
             showToast={showToast}
+            theme={theme}
+            onToggleTheme={toggleTheme}
           />
         ) : (
           <TemplatesPage onCreate={handleCreateFromTemplate} />
@@ -125,6 +135,8 @@ export default function App() {
           onRename={handleRename}
           onDelete={handleDelete}
           showToast={showToast}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
       );
     } else {
@@ -149,7 +161,13 @@ export default function App() {
       );
     }
   } else {
-    page = <Landing onCreateFromTemplate={handleCreateFromTemplate} />;
+    page = (
+      <Landing
+        onCreateFromTemplate={handleCreateFromTemplate}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    );
   }
 
   return (

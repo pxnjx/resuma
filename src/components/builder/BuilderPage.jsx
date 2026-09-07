@@ -5,10 +5,11 @@ import { importResumeFromText } from '../../utils/exporters.js';
 import EditorTabs from './EditorTabs.jsx';
 import ResumePreview from './ResumePreview.jsx';
 import Icon from '../Icon.jsx';
+import ThemeToggle from '../ThemeToggle.jsx';
 
 // The resume builder on its own page (#/builder/:id). Edits are saved
 // to the library on every change (local-first, like the prototype).
-export default function BuilderPage({ resume, onChangeData, onRename, onDelete, showToast }) {
+export default function BuilderPage({ resume, onChangeData, onRename, onDelete, showToast, theme, onToggleTheme }) {
   const editor = useResumeEditor(resume, onChangeData);
   const fileInputRef = useRef(null);
 
@@ -48,6 +49,7 @@ export default function BuilderPage({ resume, onChangeData, onRename, onDelete, 
           <Icon name="arrow-left" size={14} />
           Dashboard
         </Link>
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
       </div>
 
       <div className="editor-layout">

@@ -7,10 +7,10 @@ import Footer from './Footer.jsx';
 
 // Marketing landing page. Clicking a template card in the gallery
 // immediately creates a resume with that template and opens the builder.
-export default function Landing({ onCreateFromTemplate }) {
+export default function Landing({ onCreateFromTemplate, theme, onToggleTheme }) {
   return (
     <>
-      <Nav />
+      <Nav theme={theme} onToggleTheme={onToggleTheme} />
       <Hero />
       <Features />
       <HowItWorks />

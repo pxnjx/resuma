@@ -2,6 +2,7 @@ import { Link, navigate } from '../../router.jsx';
 import Icon from '../Icon.jsx';
 import ResumePaper from '../builder/ResumePaper.jsx';
 import ResumeMoreMenu from './ResumeMoreMenu.jsx';
+import ThemeToggle from '../ThemeToggle.jsx';
 
 function formatRelative(ts) {
   const diff = Date.now() - ts;
@@ -16,7 +17,7 @@ function formatRelative(ts) {
 }
 
 // Dashboard page — "My Resume" card grid with live previews.
-export default function Dashboard({ resumes, onNew, onDuplicate, onDelete, showToast }) {
+export default function Dashboard({ resumes, onNew, onDuplicate, onDelete, showToast, theme, onToggleTheme }) {
   return (
     <div>
       <div className="dash-header">
@@ -24,10 +25,13 @@ export default function Dashboard({ resumes, onNew, onDuplicate, onDelete, showT
           <div className="section-label">Dashboard</div>
           <div className="dash-title">My Resume</div>
         </div>
-        <button type="button" className="btn-primary" onClick={onNew}>
-          <Icon name="plus" size={15} />
-          New Resume
-        </button>
+        <div className="dash-actions">
+          <button type="button" className="btn-primary" onClick={onNew}>
+            <Icon name="plus" size={15} />
+            New Resume
+          </button>
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
       </div>
 
       {resumes.length === 0 ? (

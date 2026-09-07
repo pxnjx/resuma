@@ -1,5 +1,6 @@
 import { navigate } from '../../router.jsx';
 import Icon from '../Icon.jsx';
+import ThemeToggle from '../ThemeToggle.jsx';
 
 function scrollToId(id) {
   return (e) => {
@@ -17,7 +18,7 @@ function go(to) {
   };
 }
 
-export default function Nav() {
+export default function Nav({ theme, onToggleTheme }) {
   return (
     <nav>
       <a
@@ -39,6 +40,7 @@ export default function Nav() {
           Open Dashboard
           <Icon name="arrow-right" size={13} />
         </a>
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
       </div>
     </nav>
   );
