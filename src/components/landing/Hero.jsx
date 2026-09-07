@@ -4,10 +4,6 @@ import Icon from '../Icon.jsx';
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="badge">
-        <Icon name="star" size={12} />
-        Free · Local-First · Private
-      </div>
       <h1>
         Build a resume that
         <br />
