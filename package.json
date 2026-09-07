@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.2.0",
   "description": "Resuma — Free, local-first ATS resume builder (React + Vite)",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

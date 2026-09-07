@@ -68,8 +68,8 @@ src/
 │   ├── pdf.js                  # Native PDF generator (Helvetica + WinAnsi)
 │   ├── markdown.js             # Markdown generator
 │   ├── text.js                 # ATS text generation + readiness checklist
-│   ├── text.test.js            # Unit tests (Vitest)
-│   └── color.js                # Accent color tint helper
+│   ├── color.js                # Accent color tint helper
+│   └── *.test.js               # Unit tests (Vitest): text, pdf, zip, docx, markdown
 ├── styles/
 │   ├── global.css              # App layout, builder, ribbon, responsive
 │   └── resume-templates.css    # Resume paper styling (print + screen)
@@ -153,3 +153,7 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v4
 ```
+
+## 📄 License
+
+Released under the [MIT License](LICENSE) — free to use, modify, and redistribute.
